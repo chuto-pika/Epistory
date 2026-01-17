@@ -1,5 +1,14 @@
-## Sample Pull Request Template Description
+## 概要
+（何をしたか）
 
-This is a sample pull request template. You can customize it to fit your project's needs.
+## 変更内容
+- 
 
-Don't forget to commit your template file to the repository so that it can be used for future pull requests!
+## 目的・背景
+（なぜやったか）
+
+## 確認方法
+（どう確認すればいいか）
+
+## 補足
+（あれば）
