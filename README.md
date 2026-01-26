@@ -324,3 +324,6 @@ MVPリリース時はユーザー認証機能を実装しないため、該当�
 
 ---
 
+## ER図
+
+[![Image from Gyazo](https://i.gyazo.com/fe5a627d11c94bd497c5a8bb39ac0611.png)](https://gyazo.com/fe5a627d11c94bd497c5a8bb39ac0611)
