@@ -36,7 +36,7 @@ Docker ComposeでRails 7.0.8 + PostgreSQLの開発環境を構築する。全開
 - [x] `entrypoint.sh` の作成（server.pidの削除処理）
 - [x] `.env` / `.env.example` の作成
 - [x] `.dockerignore` の作成
-- [ ] `docker compose up` でRailsのウェルカムページが表示されることを確認
+- [x] `docker compose up` でRailsのウェルカムページが表示されることを確認
 
 ### 完了条件
 - `docker compose build` がエラーなく完了する

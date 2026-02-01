@@ -1,0 +1,26 @@
+# Render.com Blueprint設定
+# このファイルでWebサービスとPostgreSQLデータベースを定義する
+# Renderダッシュボードで「New Blueprint Instance」から読み込んで使用する
+services:
+  - type: web
+    name: kimochi-letter
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kimochi-letter-db
+          property: connectionURI
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+
+databases:
+  - name: kimochi-letter-db
+    plan: free

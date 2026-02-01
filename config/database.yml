@@ -14,8 +14,8 @@ test:
   <<: *default
   database: kimochi_letter_test
 
+# 本番環境ではRenderが提供するDATABASE_URLを使用する
+# DATABASE_URLが設定されている場合、個別のhost/username/password設定より優先される
 production:
   <<: *default
-  database: kimochi_letter_production
-  username: <%= ENV["DATABASE_USER"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
