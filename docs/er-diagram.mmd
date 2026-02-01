@@ -1,0 +1,59 @@
+erDiagram
+    users {
+        bigint id PK
+        string email
+        string encrypted_password
+        datetime created_at
+        datetime updated_at
+    }
+
+    recipients {
+        bigint id PK
+        string name
+        integer position
+    }
+
+    occasions {
+        bigint id PK
+        string name
+        integer position
+    }
+
+    impressions {
+        bigint id PK
+        string name
+        integer position
+    }
+
+    feelings {
+        bigint id PK
+        string name
+        integer position
+    }
+
+    messages {
+        bigint id PK
+        bigint user_id FK
+        bigint recipient_id FK
+        bigint occasion_id FK
+        bigint feeling_id FK
+        text episode
+        text additional_message
+        text generated_content
+        text edited_content
+        datetime created_at
+        datetime updated_at
+    }
+
+    message_impressions {
+        bigint id PK
+        bigint message_id FK
+        bigint impression_id FK
+    }
+
+    users ||--o{ messages : ""
+    recipients ||--o{ messages : ""
+    occasions ||--o{ messages : ""
+    feelings ||--o{ messages : ""
+    messages ||--o{ message_impressions : ""
+    impressions ||--o{ message_impressions : ""
