@@ -28,14 +28,14 @@
 Docker ComposeでRails 7.0.8 + PostgreSQLの開発環境を構築する。全開発の基盤となるIssue。
 
 ### やること
-- [ ] `Dockerfile` の作成（Ruby 3.2ベース）
-- [ ] `docker-compose.yml` の作成（web + db サービス）
-- [ ] `Gemfile` / `Gemfile.lock` の作成
-- [ ] `rails new` でRails 7.0.8アプリを生成（`--database=postgresql --css=tailwind --skip-jbuilder`）
-- [ ] `database.yml` のDocker用設定
-- [ ] `entrypoint.sh` の作成（server.pidの削除処理）
-- [ ] `.env` / `.env.example` の作成
-- [ ] `.dockerignore` の作成
+- [x] `Dockerfile` の作成（Ruby 3.2ベース）
+- [x] `docker-compose.yml` の作成（web + db サービス）
+- [x] `Gemfile` / `Gemfile.lock` の作成
+- [x] `rails new` でRails 7.0.8アプリを生成（`--database=postgresql --css=tailwind --skip-jbuilder`）
+- [x] `database.yml` のDocker用設定
+- [x] `entrypoint.sh` の作成（server.pidの削除処理）
+- [x] `.env` / `.env.example` の作成
+- [x] `.dockerignore` の作成
 - [ ] `docker compose up` でRailsのウェルカムページが表示されることを確認
 
 ### 完了条件
