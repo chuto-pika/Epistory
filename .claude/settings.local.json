@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(GIT_DIR=//wsl.localhost/Ubuntu/home/chuto/portfolio/.git git log:*)",
+      "Bash(file:*)"
+    ]
+  }
+}
