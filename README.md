@@ -1,5 +1,5 @@
-## サービス名（仮）
-KIMOCHI LETTER（仮）
+## サービス名
+Epistory
 
 ---
 

@@ -3,7 +3,7 @@
 # Renderダッシュボードで「New Blueprint Instance」から読み込んで使用する
 services:
   - type: web
-    name: kimochi-letter
+    name: epistory
     runtime: ruby
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
@@ -12,7 +12,7 @@ services:
         sync: false
       - key: DATABASE_URL
         fromDatabase:
-          name: kimochi-letter-db
+          name: epistory-db
           property: connectionURI
       - key: RAILS_ENV
         value: production
@@ -22,5 +22,5 @@ services:
         value: "true"
 
 databases:
-  - name: kimochi-letter-db
+  - name: epistory-db
     plan: free

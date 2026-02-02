@@ -8,11 +8,11 @@ default: &default
 
 development:
   <<: *default
-  database: kimochi_letter_development
+  database: epistory_development
 
 test:
   <<: *default
-  database: kimochi_letter_test
+  database: epistory_test
 
 # 本番環境ではRenderが提供するDATABASE_URLを使用する
 # DATABASE_URLが設定されている場合、個別のhost/username/password設定より優先される

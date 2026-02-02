@@ -1,6 +1,6 @@
 # ER図
 
-KIMOCHI LETTERサービスのデータベース設計（Ruby on Rails 7 + Devise）
+Epistoryサービスのデータベース設計（Ruby on Rails 7 + Devise）
 
 ## ER図
 
