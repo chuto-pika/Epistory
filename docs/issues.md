@@ -54,20 +54,20 @@ Docker ComposeでRails 7.0.8 + PostgreSQLの開発環境を構築する。全開
 `rails new`直後の状態で、CSSなどが当たっていない仮のTOPページを作成し、Renderにデプロイする。早期にデプロイ環境を整え、以降の開発で継続的にデプロイ確認できるようにする。
 
 ### やること
-- [ ] 仮のTOPページ用コントローラー（`PagesController`）とアクション（`home`）を作成
-- [ ] 仮のTOPページ用ビュー（`app/views/pages/home.html.erb`）を作成（シンプルなテキストのみ表示）
-- [ ] ルーティング設定（`root "pages#home"`）
-- [ ] ローカル環境で仮のTOPページが表示されることを確認
-- [ ] `render.yaml`（Blueprint）の作成、またはRenderダッシュボードでの設定
-- [ ] `bin/render-build.sh` の作成（ビルドスクリプト）
+- [x] 仮のTOPページ用コントローラー（`PagesController`）とアクション（`home`）を作成
+- [x] 仮のTOPページ用ビュー（`app/views/pages/home.html.erb`）を作成（シンプルなテキストのみ表示）
+- [x] ルーティング設定（`root "pages#home"`）
+- [x] ローカル環境で仮のTOPページが表示されることを確認
+- [x] `render.yaml`（Blueprint）の作成、またはRenderダッシュボードでの設定
+- [x] `bin/render-build.sh` の作成（ビルドスクリプト）
   - `bundle install`
   - `rails assets:precompile`
   - `rails db:migrate`
-- [ ] 本番環境用の環境変数設定（`RAILS_MASTER_KEY`, `DATABASE_URL` 等）
-- [ ] `config/environments/production.rb` の確認・調整
-- [ ] `config/puma.rb` の本番設定確認
-- [ ] Render PostgreSQLデータベースの作成
-- [ ] 初回デプロイの実行と動作確認
+- [x] 本番環境用の環境変数設定（`RAILS_MASTER_KEY`, `DATABASE_URL` 等）
+- [x] `config/environments/production.rb` の確認・調整
+- [x] `config/puma.rb` の本番設定確認
+- [x] Render PostgreSQLデータベースの作成
+- [x] 初回デプロイの実行と動作確認
 
 ### 完了条件
 - ローカル環境で `localhost:3000` にアクセスすると仮のTOPページ（テキストのみ）が表示される
