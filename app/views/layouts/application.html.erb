@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>App</title>
+    <title>Epistory - 気持ちを届けるメッセージ作成サービス</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="flex flex-col min-h-screen bg-gray-50 text-gray-800">
+    <%# ヘッダー: サービス名とナビゲーション領域 %>
+    <header class="bg-white shadow-sm">
+      <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        <%= link_to root_path, class: "text-xl font-bold text-indigo-600 hover:text-indigo-800" do %>
+          Epistory
+        <% end %>
+      </div>
+    </header>
+
+    <%# メインコンテンツ: 各ページの内容が表示される領域 %>
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-8 w-full">
       <%= yield %>
     </main>
+
+    <%# フッター: コピーライト表示 %>
+    <footer class="bg-white border-t border-gray-200">
+      <div class="max-w-5xl mx-auto px-4 py-4 text-center text-sm text-gray-500">
+        &copy; <%= Date.today.year %> Epistory
+      </div>
+    </footer>
   </body>
 </html>

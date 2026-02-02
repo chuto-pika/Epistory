@@ -85,13 +85,13 @@ Docker ComposeでRails 7.0.8 + PostgreSQLの開発環境を構築する。全開
 Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーション共通のレイアウトファイルを整備する。
 
 ### やること
-- [ ] Tailwind CSSの動作確認（`rails new`時に`--css=tailwind`で導入済みの場合は設定確認）
-- [ ] `turbo-rails`、`stimulus-rails` の動作確認
-- [ ] `app/views/layouts/application.html.erb` にヘッダー・フッター・メインコンテンツ領域を作成
-- [ ] レスポンシブ対応の基本スタイル設定
-- [ ] `app/assets/stylesheets/` にカスタムスタイルの基盤ファイルを作成（必要に応じて）
-- [ ] トップページ用の静的コントローラー（`PagesController#home`）とビューを作成
-- [ ] ルーティング設定（`root` を `pages#home` に設定）
+- [x] Tailwind CSSの動作確認（`rails new`時に`--css=tailwind`で導入済みの場合は設定確認）
+- [x] `turbo-rails`、`stimulus-rails` の動作確認
+- [x] `app/views/layouts/application.html.erb` にヘッダー・フッター・メインコンテンツ領域を作成
+- [x] レスポンシブ対応の基本スタイル設定
+- [x] `app/assets/stylesheets/` にカスタムスタイルの基盤ファイルを作成（必要に応じて）
+- [x] トップページ用の静的コントローラー（`PagesController#home`）とビューを作成
+- [x] ルーティング設定（`root` を `pages#home` に設定）
 
 ### 完了条件
 - Tailwind CSSのクラスがビューで適用されている
