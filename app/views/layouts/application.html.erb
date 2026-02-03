@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>App</title>
+    <title>Epistory - 気持ちを届けるメッセージ作成サービス</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-gray-50 text-gray-800">
+    <%= render "shared/header" %>
+
+    <%# メインコンテンツ: 各ページの内容が表示される領域 %>
+    <main class="max-w-5xl mx-auto px-4 py-8 w-full min-h-[calc(100vh-140px)]">
       <%= yield %>
     </main>
+
+    <%= render "shared/footer" %>
   </body>
 </html>
