@@ -109,15 +109,16 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
 ### 概要
 質問フォームの選択肢となるマスターデータ（recipients, occasions, impressions, feelings）のテーブルとモデルを作成する。
 
+
 ### やること
-- [ ] `recipients` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `occasions` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `impressions` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `feelings` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] 各モデルファイルの作成（`Recipient`, `Occasion`, `Impression`, `Feeling`）
-- [ ] バリデーション追加（name: presence, position: presence + numericality）
-- [ ] `default_scope { order(position: :asc) }` の設定
-- [ ] モデルのユニットテスト作成
+- [x] `recipients` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `occasions` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `impressions` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `feelings` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] 各モデルファイルの作成（`Recipient`, `Occasion`, `Impression`, `Feeling`）
+- [x] バリデーション追加（name: presence, position: presence + numericality）
+- [x] `default_scope { order(position: :asc) }` の設定
+- [x] モデルのユニットテスト作成
 
 ### 完了条件
 - `rails db:migrate` が成功する
