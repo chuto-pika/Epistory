@@ -110,14 +110,14 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
 質問フォームの選択肢となるマスターデータ（recipients, occasions, impressions, feelings）のテーブルとモデルを作成する。
 
 ### やること
-- [ ] `recipients` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `occasions` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `impressions` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] `feelings` テーブルのマイグレーション作成（name:string, position:integer）
-- [ ] 各モデルファイルの作成（`Recipient`, `Occasion`, `Impression`, `Feeling`）
-- [ ] バリデーション追加（name: presence, position: presence + numericality）
-- [ ] `default_scope { order(position: :asc) }` の設定
-- [ ] モデルのユニットテスト作成
+- [x] `recipients` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `occasions` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `impressions` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] `feelings` テーブルのマイグレーション作成（name:string, position:integer）
+- [x] 各モデルファイルの作成（`Recipient`, `Occasion`, `Impression`, `Feeling`）
+- [x] バリデーション追加（name: presence, position: presence + numericality）
+- [x] `default_scope { order(position: :asc) }` の設定
+- [x] モデルのユニットテスト作成
 
 ### 完了条件
 - `rails db:migrate` が成功する
@@ -135,12 +135,12 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
 マスターテーブルにMVPで使用する選択肢データを投入する。
 
 ### やること
-- [ ] `db/seeds.rb` にrecipientsデータを追加（親, パートナー, 友人, 兄弟・姉妹, 祖父母, 職場の人, その他）
-- [ ] `db/seeds.rb` にoccasionsデータを追加（誕生日・記念日, 日頃の感謝, 最近助けてもらった, しばらく会えていない, 特別な理由はない, その他）
-- [ ] `db/seeds.rb` にimpressionsデータを追加（いつも支えてくれる, 一緒にいると安心する, 自分を理解してくれる, 困ったときに頼れる, 笑顔にしてくれる, 尊敬している, 刺激をもらえる）
-- [ ] `db/seeds.rb` にfeelingsデータを追加（ありがとう, これからもよろしく, いつも助かっている, 大切に思っている, ごめんね、そしてありがとう）
-- [ ] 冪等性を考慮した実装（`find_or_create_by` の使用）
-- [ ] `rails db:seed` の動作確認
+- [x] `db/seeds.rb` にrecipientsデータを追加（親, パートナー, 友人, 兄弟・姉妹, 祖父母, 職場の人, その他）
+- [x] `db/seeds.rb` にoccasionsデータを追加（誕生日・記念日, 日頃の感謝, 最近助けてもらった, しばらく会えていない, 特別な理由はない, その他）
+- [x] `db/seeds.rb` にimpressionsデータを追加（いつも支えてくれる, 一緒にいると安心する, 自分を理解してくれる, 困ったときに頼れる, 笑顔にしてくれる, 尊敬している, 刺激をもらえる）
+- [x] `db/seeds.rb` にfeelingsデータを追加（ありがとう, これからもよろしく, いつも助かっている, 大切に思っている, ごめんね、そしてありがとう）
+- [x] 冪等性を考慮した実装（`find_or_create_by` の使用）
+- [x] `rails db:seed` の動作確認
 
 ### 完了条件
 - `rails db:seed` がエラーなく完了する
