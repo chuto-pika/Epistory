@@ -158,7 +158,7 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
 ユーザーの回答結果と生成メッセージを保存するmessagesテーブル、および多対多の中間テーブル（message_impressions）を作成する。
 
 ### やること
-- [ ] `messages` テーブルのマイグレーション作成
+- [x] `messages` テーブルのマイグレーション作成
   - user_id: bigint（nullable、外部キー）
   - recipient_id: bigint（外部キー、NOT NULL）
   - occasion_id: bigint（外部キー、NOT NULL）
@@ -168,12 +168,12 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
   - generated_content: text
   - edited_content: text（nullable）
   - timestamps
-- [ ] `message_impressions` テーブルのマイグレーション作成（message_id, impression_id）
-- [ ] `Message` モデルの作成（アソシエーション・バリデーション）
-- [ ] `MessageImpression` モデルの作成
-- [ ] `has_many :message_impressions` / `has_many :impressions, through: :message_impressions` の設定
-- [ ] マスターモデル側に `has_many :messages` を追加
-- [ ] モデルのユニットテスト作成
+- [x] `message_impressions` テーブルのマイグレーション作成（message_id, impression_id）
+- [x] `Message` モデルの作成（アソシエーション・バリデーション）
+- [x] `MessageImpression` モデルの作成
+- [x] `has_many :message_impressions` / `has_many :impressions, through: :message_impressions` の設定
+- [x] マスターモデル側に `has_many :messages` を追加
+- [x] モデルのユニットテスト作成
 
 ### 完了条件
 - `rails db:migrate` が成功する
