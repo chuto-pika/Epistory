@@ -55,3 +55,43 @@ PRの「テスト計画」に記載した項目は、PR作成前に全て実施�
 - [x] 各モデルのバリデーションが正しく動作する（テストで確認）
 - [x] `rails console` でレコードの作成・取得ができる  ← 手動確認も忘れずに
 ```
+
+---
+
+## Lint / 静的解析ツール
+
+PR作成前に以下のチェックを全て実行すること。
+
+### RuboCop (Lint)
+
+```bash
+docker compose exec web bundle exec rubocop
+```
+
+- 違反が0件であること
+- 自動修正: `docker compose exec web bundle exec rubocop -A`
+
+### Brakeman (セキュリティスキャン)
+
+```bash
+docker compose exec web bundle exec brakeman -q
+```
+
+- High/Medium の脆弱性がないこと
+- Unmaintained Dependency の警告は許容（Rails 7.0 がサポート終了のため）
+
+### bundler-audit (依存関係の脆弱性)
+
+```bash
+docker compose exec web bundle exec bundle-audit check --update
+```
+
+- Rails 7.0 関連の既知の警告は許容（後でアップグレード予定）
+
+### ユニットテスト
+
+```bash
+docker compose exec web rails test
+```
+
+- 全テストがパスすること
