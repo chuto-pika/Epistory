@@ -1,8 +1,20 @@
-<%# ヘッダー: サービス名とナビゲーション領域 %>
-<header class="bg-white shadow-sm">
-  <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-    <%= link_to root_path, class: "text-xl font-bold text-indigo-600 hover:text-indigo-800" do %>
-      Epistory
-    <% end %>
+<header class="sticky top-0 z-50 w-full border-b border-primary/5 bg-background-light/80 backdrop-blur-md px-6 lg:px-20 py-4">
+  <div class="mx-auto flex max-w-7xl items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="text-primary">
+        <span class="material-symbols-outlined text-3xl">auto_stories</span>
+      </div>
+      <%= link_to "Epistory", root_path, class: "text-xl font-bold tracking-tight text-main-text" %>
+    </div>
+    <nav class="hidden md:flex items-center gap-10">
+      <a href="#how-it-works" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">使い方</a>
+      <a href="#why-epistory" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">Epistoryとは</a>
+      <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+        メッセージを作る
+      </button>
+    </nav>
+    <div class="md:hidden">
+      <span class="material-symbols-outlined text-main-text">menu</span>
+    </div>
   </div>
 </header>

@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>Epistory - 気持ちを届けるメッセージ作成サービス</title>
+    <title>Epistory - 言葉にできなかった想いを、かたちに</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-gray-50 text-gray-800">
-    <%= render "shared/header" %>
+  <body class="bg-background-light selection:bg-primary/20">
+    <div class="relative flex min-h-screen flex-col overflow-x-hidden">
+      <%= render "shared/header" %>
 
-    <%# メインコンテンツ: 各ページの内容が表示される領域 %>
-    <main class="max-w-5xl mx-auto px-4 py-8 w-full min-h-[calc(100vh-140px)]">
-      <%= yield %>
-    </main>
+      <main class="flex-grow">
+        <%= yield %>
+      </main>
 
-    <%= render "shared/footer" %>
+      <%= render "shared/footer" %>
+    </div>
   </body>
 </html>

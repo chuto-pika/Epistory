@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #c06c5e;
+  --color-main-text: #4a3728;
+  --color-sub-text: #6b5a4d;
+  --color-background-light: #fdfaf1;
+  --color-background-dark: #f5f0e1;
+  --font-body: "Inter", "Noto Sans JP", sans-serif;
+  --font-display: "Inter", "Noto Sans JP", sans-serif;
+}
+
+@layer base {
+  body {
+    color: var(--color-main-text);
+    font-family: var(--font-body);
+    line-height: 1.8;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(192, 108, 94, 0.1);
+  }
+
+  .hero-gradient {
+    background: radial-gradient(circle at center, rgba(192, 108, 94, 0.05) 0%, transparent 70%);
+  }
+}

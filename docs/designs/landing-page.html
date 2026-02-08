@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Epistory - 言葉にできなかった想いを、かたちに</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c06c5e", // Dusty Terracotta / Rose
+                        "accent": "#c06c5e",
+                        "main-text": "#4a3728", // Dark Brown
+                        "sub-text": "#6b5a4d",
+                        "background-light": "#fdfaf1", // Warm Beige
+                        "background-dark": "#f5f0e1",
+                    },
+                    fontFamily: {
+                        "display": ["'Noto Serif JP'", "serif"],
+                        "body": ["'Noto Sans JP'", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(192, 108, 94, 0.1);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(192, 108, 94, 0.05) 0%, transparent 70%);
+        }
+        body {
+            color: theme('colors.main-text');
+        }
+        h1, h2, h3, h4, .serif-font {
+            font-family: theme('fontFamily.display');
+        }
+        p, a, button, span, .sans-font {
+            font-family: theme('fontFamily.body');
+        }
+    </style>
+</head>
+<body class="bg-background-light font-body selection:bg-primary/20">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 w-full border-b border-primary/5 bg-background-light/80 backdrop-blur-md px-6 lg:px-20 py-4">
+<div class="mx-auto flex max-w-7xl items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">auto_stories</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-main-text">Epistory</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium text-sub-text hover:text-primary transition-colors" href="#how-it-works">How it Works</a>
+<a class="text-sm font-medium text-sub-text hover:text-primary transition-colors" href="#why-epistory">Why Epistory</a>
+<a class="text-sm font-medium text-sub-text hover:text-primary transition-colors" href="#">Pricing</a>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+                        Start Creating
+                    </button>
+</nav>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-main-text">menu</span>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<section class="relative pt-20 pb-32 px-6 hero-gradient">
+<div class="mx-auto max-w-4xl text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-8">
+<span class="material-symbols-outlined text-sm">favorite</span>
+                        Crafted for Connection
+                    </div>
+<h1 class="text-5xl lg:text-7xl font-bold tracking-tight text-main-text mb-8 leading-[1.2]">
+                        Give words to the feelings you <span class="text-primary italic">couldn't say</span>
+</h1>
+<p class="text-lg lg:text-xl text-sub-text max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+                        Epistory guides you through a thoughtful journey of reflection to help you craft the perfect message of gratitude for those who matter most.
+                    </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto min-w-[200px] h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+                            Start Creating
+                        </button>
+<button class="w-full sm:w-auto min-w-[200px] h-14 glass-panel text-primary border border-primary/20 rounded-xl font-bold text-lg hover:bg-white/40 transition-all">
+                            View Samples
+                        </button>
+</div>
+</div>
+<div class="mt-20 flex justify-center">
+<div class="relative w-full max-w-4xl aspect-[16/9] rounded-2xl overflow-hidden border border-primary/10 shadow-xl">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Soft focused image of a fountain pen on textured paper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAg0ia3ZoMdFlmeaf0R3RXahZgHEnvg1ivXS3rezpluOHcVD1ISpEKJaae8ix0zlJQnTPlOibjC9NL8gXXeGA0kznRNvOD9mAptA9uW461byTGuZjWRchohSGFIxmdrCzK4HBu34BBEf9Yljqk0Bu8-G7qrdygZ-SVHWGSBBUFW61w4jFGpK9Oh8ovyEb62QpFMW7borTui6X4gFyl8G-r6FdxCMFGMz2uwkdieDOOTIP33hzOHVbaz0iJDAoqjuDrmZEPPCr1fht8');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-light/40 via-transparent to-transparent"></div>
+</div>
+</div>
+</section>
+<section class="py-24 px-6 bg-background-dark/30" id="how-it-works">
+<div class="mx-auto max-w-7xl">
+<div class="flex flex-col mb-16">
+<h2 class="text-primary text-sm font-bold tracking-[0.2em] uppercase mb-4 sans-font">The Process</h2>
+<h3 class="text-3xl lg:text-4xl font-bold text-main-text mb-4">How it Works</h3>
+<p class="text-sub-text max-w-lg font-light sans-font">Articulate your deepest gratitude in three simple, guided steps designed for emotional sincerity.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-white/50 p-8 rounded-2xl border border-primary/5 group hover:border-primary/30 transition-all shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<h4 class="text-xl font-bold text-main-text mb-4">Select Recipient</h4>
+<p class="text-sub-text leading-relaxed font-light sans-font">
+                                Choose the special person who deserves your heartfelt thanks. Whether a mentor, partner, or old friend.
+                            </p>
+</div>
+<div class="bg-white/50 p-8 rounded-2xl border border-primary/5 group hover:border-primary/30 transition-all shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<h4 class="text-xl font-bold text-main-text mb-4">Answer Questions</h4>
+<p class="text-sub-text leading-relaxed font-light sans-font">
+                                Reflect on shared memories through our guided, thoughtful prompts that spark genuine emotion.
+                            </p>
+</div>
+<div class="bg-white/50 p-8 rounded-2xl border border-primary/5 group hover:border-primary/30 transition-all shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+<h4 class="text-xl font-bold text-main-text mb-4">Complete Message</h4>
+<p class="text-sub-text leading-relaxed font-light sans-font">
+                                Receive a beautifully articulated letter, born from your own heart, ready to be shared or printed.
+                            </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 px-6 overflow-hidden" id="why-epistory">
+<div class="mx-auto max-w-7xl">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-8">
+<div>
+<h2 class="text-3xl lg:text-5xl font-bold text-main-text mb-6">Why choose Epistory?</h2>
+<p class="text-sub-text text-lg font-light leading-relaxed sans-font">
+                                    We believe the most powerful words are already inside you. Our technology doesn't replace your voice—it amplifies it.
+                                </p>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="mt-1 text-primary">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<div>
+<h5 class="text-main-text font-bold mb-1 serif-font">Deep Self-Reflection</h5>
+<p class="text-sub-text text-sm font-light sans-font">Our process is designed to help you rediscover memories and emotions you thought were lost in the busyness of life.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 text-primary">
+<span class="material-symbols-outlined">draw</span>
+</div>
+<div>
+<h5 class="text-main-text font-bold mb-1 serif-font">More Than Just AI</h5>
+<p class="text-sub-text text-sm font-light sans-font">Unlike generic generators, we act as a bridge for your own voice, ensuring every word feels like you, not a machine.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 text-primary">
+<span class="material-symbols-outlined">sentiment_very_satisfied</span>
+</div>
+<div>
+<h5 class="text-main-text font-bold mb-1 serif-font">Genuine Human Connection</h5>
+<p class="text-sub-text text-sm font-light sans-font">Create a lasting legacy of appreciation that people will keep and cherish for a lifetime.</p>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<button class="flex items-center gap-2 text-primary font-bold group sans-font">
+                                    Learn about our philosophy
+                                    <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="relative grid grid-cols-2 gap-4">
+<div class="space-y-4 pt-12">
+<div class="aspect-[3/4] rounded-2xl bg-center bg-cover border border-primary/10" data-alt="A person writing in a notebook by a window" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq9sB3mpXw-I9hk0h8gqh1tNos-8TSS5t3q1UKGcTP2ejySEs3XZZl7oMz2om6HrRljbphZbTJu10CYHwiJT_iirV1plY8qZ13-q2ESlL7YY0IcITBqQF_yZQewA_2OHXFcLmPqG5GcYiXoTKuopkbpkPsi_sT_KGzkn6Wue0qVR2rWYfnonFW1VzYQW5o4JSkVHYdJSdt1fq_hMsX2-WAJAGvraajXpeDxd3bVSOQiMFX0b2NBWgmEnpkeKuPzA9igkT5Rc6Z6ds');"></div>
+<div class="aspect-square rounded-2xl bg-center bg-cover border border-primary/10" data-alt="Two people hugging warmly" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOjQOw4KcH-LCYVQjsNpOs9Xci2-GEqMN9NPb3tMHKHXRneeANSc2gV8zIbnrMxqdHahMGTQQ1dIc5gPsmAklPB5TekHoT19TAW0HBsvo8s-AxOMeTRkPAJyZzLklZB-GYGl9oi-lo-R_BKYjvMM9prG4zB9I35Ija050N2KV0rSYAHNdREd4nTv98I6ioQ5LdHBPmYeqKo_T1lW__g8wvi1vDM68v6tdMcPxxC4oJTe07D4PzjQYDfdKa-1B-wyxK41YRYIl1ZlQ');"></div>
+</div>
+<div class="space-y-4">
+<div class="aspect-square rounded-2xl bg-center bg-cover border border-primary/10" data-alt="A beautiful envelope with a wax seal" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBj4JcHVwCRifpl6YVswNoX0-I3G_QNHXi8w2KpARb37XnW1EOIi8MRLkXYFU3UF1muSRsofIbYJ75H6ALId5WlgEENpHNg1fhr7eiUkYvDDHxe-i8LobULnGMJ9b9pCdEuT6HcjZFgGiBlQTFLu2zDz7JUp5_exueuQpCYFFeNLeqo9ncJOlEPZTPWddcm_uzLQtDQEQjrNFczZZmi_uKWrPw7hAox1mItSRT_a6kUhjRc-R2eLh0aaLdbzOFYOgRfOFl_YGMvmDE');"></div>
+<div class="aspect-[3/4] rounded-2xl bg-center bg-cover border border-primary/10" data-alt="Soft morning light on a desk with a journal" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRHakoa4JvgDOMNEIZOtE5PW0ACk7Y01mG81gLBj0RfWvlbqtK7xrLxes3o18E7TbJOjxY-9WksHoEMl2XMY2gvAwZky87RNHhFL15wDzcBGHp0dTqFXPmqgy6smWESgsrQqXYF-dTSLBm7e6uxPEwu25FyovReJ1bKt8uxZd1R-ixD76SJCCJ8XJRO5GzrtamvlprDDYEBO0mprxACr_dHlO-X8IzUPKKkLlV84D7sOR9tV7NlJA7uznWv7VtKBJYVQeAvwZDI64');"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 px-6 text-center">
+<div class="mx-auto max-w-3xl glass-panel p-16 rounded-[2rem] border-primary/20 shadow-lg">
+<h2 class="text-4xl font-bold text-main-text mb-6">Ready to share your heart?</h2>
+<p class="text-sub-text mb-10 text-lg font-light sans-font">It only takes 5 minutes to create a memory that lasts forever.</p>
+<button class="bg-primary text-white px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_8px_30px_rgba(192,108,94,0.4)] transition-all">
+                        Begin Your Story
+                    </button>
+<p class="mt-6 text-sm text-sub-text/70 sans-font">No credit card required for your first draft.</p>
+</div>
+</section>
+</main>
+<footer class="border-t border-primary/10 py-12 px-6 bg-background-dark/20">
+<div class="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">auto_stories</span>
+<span class="text-main-text font-bold tracking-tight serif-font">Epistory</span>
+</div>
+<div class="flex gap-8 text-sm text-sub-text sans-font">
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="text-sub-text/70 text-sm italic sans-font">
+                    Handcrafted with heart for meaningful connections.
+                </div>
+</div>
+<div class="text-center mt-12 text-sub-text/50 text-xs sans-font">
+                © 2024 Epistory. All rights reserved.
+            </div>
+</footer>
+</div>
+
+</body></html>
