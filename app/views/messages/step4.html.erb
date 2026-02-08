@@ -1,0 +1,25 @@
+<%= render layout: "messages/step_layout", locals: { current_step: 4, title: "エピソードを教えてください", subtitle: "相手との思い出やエピソードがあれば書いてください。（任意）" } do %>
+  <%= form_with url: step4_message_path, method: :post, class: "space-y-6" do |f| %>
+    <div>
+      <textarea name="episode" rows="6"
+                class="w-full p-4 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
+                placeholder="例：先月、仕事で落ち込んでいた時にそっと話を聞いてくれた"><%= @episode %></textarea>
+    </div>
+
+    <div class="p-4 rounded-xl bg-background-dark/50">
+      <p class="text-sm font-bold text-sub-text mb-2">ヒント</p>
+      <ul class="text-sm text-sub-text space-y-1">
+        <li>- 最近あった出来事や思い出</li>
+        <li>- 相手にしてもらって嬉しかったこと</li>
+        <li>- 一緒に過ごした印象的な時間</li>
+      </ul>
+    </div>
+
+    <div class="flex gap-4 pt-6">
+      <%= link_to "戻る", step3_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        次へ進む
+      </button>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,17 @@
+<section class="py-12 px-6">
+  <div class="mx-auto max-w-2xl">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2">メッセージが完成しました</h1>
+      <p class="text-sub-text font-light">あなたの気持ちを込めたメッセージです。</p>
+    </div>
+
+    <div class="p-6 lg:p-8 rounded-2xl border-2 border-primary/10 bg-white/50 mb-8">
+      <p class="text-main-text whitespace-pre-line leading-relaxed"><%= @message.edited_content.presence || @message.generated_content %></p>
+    </div>
+
+    <div class="space-y-4">
+      <%= link_to "新しいメッセージを作る", new_message_path, class: "block w-full h-14 bg-primary text-white rounded-xl font-bold text-lg text-center leading-[3.5rem] hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all" %>
+      <%= link_to "トップに戻る", root_path, class: "block w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg text-center leading-[3.5rem] hover:bg-primary/5 transition-all" %>
+    </div>
+  </div>
+</section>

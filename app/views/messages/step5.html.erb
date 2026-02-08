@@ -1,0 +1,18 @@
+<%= render layout: "messages/step_layout", locals: { current_step: 5, title: "どんな気持ちを届けますか？", subtitle: "一番伝えたい気持ちを選んでください。" } do %>
+  <%= form_with url: step5_message_path, method: :post, class: "space-y-4" do |f| %>
+    <% @feelings.each do |feeling| %>
+      <%= render "messages/selection_card",
+                 name: "feeling_id",
+                 value: feeling.id,
+                 label: feeling.name,
+                 checked: @selected_id == feeling.id %>
+    <% end %>
+
+    <div class="flex gap-4 pt-6">
+      <%= link_to "戻る", step4_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        次へ進む
+      </button>
+    </div>
+  <% end %>
+<% end %>

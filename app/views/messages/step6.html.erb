@@ -1,0 +1,16 @@
+<%= render layout: "messages/step_layout", locals: { current_step: 6, title: "追加メッセージはありますか？", subtitle: "最後に伝えたいことがあれば書いてください。（任意）" } do %>
+  <%= form_with url: step6_message_path, method: :post, class: "space-y-6" do |f| %>
+    <div>
+      <textarea name="additional_message" rows="4"
+                class="w-full p-4 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
+                placeholder="例：今度一緒にごはん行こうね"><%= @additional_message %></textarea>
+    </div>
+
+    <div class="flex gap-4 pt-6">
+      <%= link_to "戻る", step5_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        メッセージを作成する
+      </button>
+    </div>
+  <% end %>
+<% end %>
