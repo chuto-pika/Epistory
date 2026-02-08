@@ -1,0 +1,11 @@
+<%# locals: (current_step:, title:, subtitle:) %>
+<section class="py-12 px-6">
+  <div class="mx-auto max-w-2xl">
+    <%= render "messages/progress_bar", current_step: current_step %>
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2"><%= title %></h1>
+      <p class="text-sub-text font-light"><%= subtitle %></p>
+    </div>
+    <%= yield %>
+  </div>
+</section>

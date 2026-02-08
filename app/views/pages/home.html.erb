@@ -13,9 +13,7 @@
       伝えたかった気持ちを、Epistoryが言葉にするお手伝いをします。
     </p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-      <button class="w-full sm:w-auto min-w-[200px] h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
-        メッセージを作る
-      </button>
+      <%= link_to "メッセージを作る", new_message_path, class: "w-full sm:w-auto min-w-[200px] h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all flex items-center justify-center" %>
     </div>
   </div>
 </section>
@@ -112,8 +110,6 @@
   <div class="mx-auto max-w-3xl glass-panel p-16 rounded-[2rem] border-primary/20 shadow-lg">
     <h2 class="text-3xl lg:text-4xl font-bold text-main-text mb-6">気持ちを届けてみませんか？</h2>
     <p class="text-sub-text mb-10 text-lg font-light">たった5分で、一生の思い出になるメッセージが作れます。</p>
-    <button class="bg-primary text-white px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_8px_30px_rgba(192,108,94,0.4)] transition-all">
-      メッセージを作る
-    </button>
+    <%= link_to "メッセージを作る", new_message_path, class: "bg-primary text-white px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_8px_30px_rgba(192,108,94,0.4)] transition-all inline-block" %>
   </div>
 </section>

@@ -1,0 +1,17 @@
+<%= render layout: "messages/step_layout", locals: { current_step: 1, title: "誰に届けますか？", subtitle: "メッセージを届けたい相手を選んでください。" } do %>
+  <%= form_with url: step1_message_path, method: :post, class: "space-y-4" do |f| %>
+    <% @recipients.each do |recipient| %>
+      <%= render "messages/selection_card",
+                 name: "recipient_id",
+                 value: recipient.id,
+                 label: recipient.name,
+                 checked: @selected_id == recipient.id %>
+    <% end %>
+
+    <div class="pt-6">
+      <button type="submit" class="w-full h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        次へ進む
+      </button>
+    </div>
+  <% end %>
+<% end %>

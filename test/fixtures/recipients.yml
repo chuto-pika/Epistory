@@ -1,0 +1,11 @@
+parent:
+  name: 親
+  position: 1
+
+partner:
+  name: パートナー
+  position: 2
+
+friend:
+  name: 友人
+  position: 3

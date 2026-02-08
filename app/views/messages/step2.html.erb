@@ -1,0 +1,18 @@
+<%= render layout: "messages/step_layout", locals: { current_step: 2, title: "どんなきっかけですか？", subtitle: "メッセージを届けたいきっかけを選んでください。" } do %>
+  <%= form_with url: step2_message_path, method: :post, class: "space-y-4" do |f| %>
+    <% @occasions.each do |occasion| %>
+      <%= render "messages/selection_card",
+                 name: "occasion_id",
+                 value: occasion.id,
+                 label: occasion.name,
+                 checked: @selected_id == occasion.id %>
+    <% end %>
+
+    <div class="flex gap-4 pt-6">
+      <%= link_to "戻る", step1_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        次へ進む
+      </button>
+    </div>
+  <% end %>
+<% end %>

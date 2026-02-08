@@ -1,0 +1,8 @@
+<label class="relative block cursor-pointer">
+  <input type="checkbox" name="<%= name %>" value="<%= value %>" class="peer absolute opacity-0 w-0 h-0" <%= "checked" if checked %>>
+  <div class="p-5 rounded-xl border-2 border-primary/10 bg-white/50 transition-all
+              peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-md
+              hover:border-primary/30 hover:shadow-sm">
+    <span class="text-main-text font-medium"><%= label %></span>
+  </div>
+</label>

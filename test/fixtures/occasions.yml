@@ -1,0 +1,11 @@
+birthday:
+  name: 誕生日・記念日
+  position: 1
+
+gratitude:
+  name: 日頃の感謝
+  position: 2
+
+helped:
+  name: 最近助けてもらった
+  position: 3

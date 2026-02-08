@@ -1,0 +1,16 @@
+<% total_steps = local_assigns.fetch(:total_steps, 6) %>
+<div class="mb-10">
+  <div class="flex items-center justify-between mb-3">
+    <span class="text-sm font-bold text-primary">Step <%= current_step %> / <%= total_steps %></span>
+  </div>
+  <div class="relative flex items-center">
+    <div class="w-full h-1.5 bg-background-dark rounded-full overflow-hidden">
+      <div class="h-full bg-primary rounded-full transition-all duration-500" style="width: <%= (current_step.to_f / total_steps * 100).round %>%"></div>
+    </div>
+  </div>
+  <div class="flex justify-between mt-2">
+    <% total_steps.times do |i| %>
+      <div class="w-2.5 h-2.5 rounded-full <%= i < current_step ? 'bg-primary' : 'bg-background-dark' %> transition-colors"></div>
+    <% end %>
+  </div>
+</div>

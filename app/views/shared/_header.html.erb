@@ -9,9 +9,7 @@
     <nav class="hidden md:flex items-center gap-10">
       <a href="#how-it-works" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">使い方</a>
       <a href="#why-epistory" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">Epistoryとは</a>
-      <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm">
-        メッセージを作る
-      </button>
+      <%= link_to "メッセージを作る", new_message_path, class: "bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm" %>
     </nav>
     <div class="md:hidden">
       <span class="material-symbols-outlined text-main-text">menu</span>
