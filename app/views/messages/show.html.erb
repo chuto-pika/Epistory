@@ -1,5 +1,5 @@
 <section class="py-12 px-6">
-  <div class="mx-auto max-w-2xl">
+  <div class="mx-auto max-w-2xl" data-controller="clipboard">
     <div class="text-center mb-8">
       <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2">メッセージが完成しました</h1>
       <p class="text-sub-text font-light">あなたの気持ちを込めたメッセージです。</p>
@@ -8,7 +8,7 @@
     <%# 手紙風メッセージ表示 %>
     <div class="relative p-8 lg:p-10 rounded-2xl bg-white/80 border border-primary/10 shadow-sm mb-6"
          style="background-image: repeating-linear-gradient(transparent, transparent 2.2rem, rgba(192,108,94,0.08) 2.2rem, rgba(192,108,94,0.08) calc(2.2rem + 1px)); background-position: 0 1.4rem;">
-      <p id="message-text" class="text-main-text whitespace-pre-line leading-[2.2rem]"><%= @message.edited_content.presence || @message.generated_content %></p>
+      <p data-clipboard-target="source" class="text-main-text whitespace-pre-line leading-[2.2rem]"><%= @message.edited_content.presence || @message.generated_content %></p>
     </div>
 
     <%# アクションボタン %>
@@ -17,7 +17,7 @@
         <span class="material-symbols-outlined text-xl">edit</span>
         編集する
       <% end %>
-      <button type="button" id="copy-button"
+      <button type="button" data-clipboard-target="button" data-action="click->clipboard#copy"
               class="flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all">
         <span class="material-symbols-outlined text-xl">content_copy</span>
         コピーする
@@ -30,16 +30,3 @@
     </div>
   </div>
 </section>
-
-<script>
-  document.getElementById("copy-button").addEventListener("click", function() {
-    var text = document.getElementById("message-text").innerText;
-    var button = this;
-    navigator.clipboard.writeText(text).then(function() {
-      button.innerHTML = '<span class="material-symbols-outlined text-xl">check</span> コピーしました';
-      setTimeout(function() {
-        button.innerHTML = '<span class="material-symbols-outlined text-xl">content_copy</span> コピーする';
-      }, 2000);
-    });
-  });
-</script>
