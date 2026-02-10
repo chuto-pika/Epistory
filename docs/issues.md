@@ -334,12 +334,12 @@ Tailwind CSSとHotwire（Turbo/Stimulus）を導入し、アプリケーショ�
 メッセージをクリップボードにコピーする機能をStimulus Controllerで実装する。
 
 ### やること
-- [ ] `app/javascript/controllers/clipboard_controller.js` の作成
-- [ ] Clipboard API（`navigator.clipboard.writeText`）を使用したコピー処理
-- [ ] コピー成功時のフィードバックUI（トースト通知 or ボタンテキスト変更）
-- [ ] Clipboard API非対応ブラウザのフォールバック処理（`document.execCommand('copy')`）
-- [ ] show画面のコピーボタンにStimulus Controllerを接続
-- [ ] コピー対象テキストの取得ロジック（`edited_content || generated_content`）
+- [x] `app/javascript/controllers/clipboard_controller.js` の作成
+- [x] Clipboard API（`navigator.clipboard.writeText`）を使用したコピー処理
+- [x] コピー成功時のフィードバックUI（トースト通知 or ボタンテキスト変更）
+- [x] Clipboard API非対応ブラウザのフォールバック処理（`document.execCommand('copy')`）
+- [x] show画面のコピーボタンにStimulus Controllerを接続
+- [x] コピー対象テキストの取得ロジック（`edited_content || generated_content`）
 
 ### 完了条件
 - 「コピーする」ボタンをクリックするとメッセージがクリップボードにコピーされる
