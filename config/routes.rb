@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/health", to: proc { [200, {}, ["ok"]] }
+
   root "pages#home"
 
   resource :message, only: [:new] do
