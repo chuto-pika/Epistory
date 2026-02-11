@@ -88,17 +88,21 @@ class MessageCreationFlowTest < ApplicationSystemTestCase
 
     # Step3: 戻るボタンで Step2 に戻る
     click_link "戻る"
+
     assert_text "どんなきっかけですか？"
 
     # Step2 の選択が保持されていることを確認
     radio = find("input[name='occasion_id'][value='#{occasions(:helped).id}']", visible: false)
-    assert radio.checked?
+
+    assert_predicate radio, :checked?
 
     # さらに Step1 に戻る
     click_link "戻る"
+
     assert_text "誰に届けますか？"
 
     radio = find("input[name='recipient_id'][value='#{recipients(:partner).id}']", visible: false)
-    assert radio.checked?
+
+    assert_predicate radio, :checked?
   end
 end

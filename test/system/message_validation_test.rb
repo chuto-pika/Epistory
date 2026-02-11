@@ -3,6 +3,7 @@ require "application_system_test_case"
 class MessageValidationTest < ApplicationSystemTestCase
   test "Step1: 未選択で送信するとエラーが表示される" do
     visit new_message_path
+
     assert_text "誰に届けますか？"
 
     click_button "次へ進む"
