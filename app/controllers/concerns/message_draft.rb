@@ -39,7 +39,7 @@ module MessageDraft
 
     instance_variable_set(:"@#{field}", value)
     @error_message = "#{Message.human_attribute_name(field)}は#{max_length}文字以内で入力してください"
-    render step
+    render step, status: :unprocessable_entity
     true
   end
 

@@ -143,7 +143,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     complete_steps_one_to_three
     post step4_message_path, params: { episode: "あ" * (Message::EPISODE_MAX_LENGTH + 1) }
 
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "textarea[name='episode']"
   end
 
@@ -223,7 +223,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
       post step6_message_path, params: { additional_message: "あ" * (Message::ADDITIONAL_MESSAGE_MAX_LENGTH + 1) }
     end
 
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "textarea[name='additional_message']"
   end
 
