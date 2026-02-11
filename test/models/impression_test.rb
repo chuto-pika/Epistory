@@ -11,7 +11,7 @@ class ImpressionTest < ActiveSupport::TestCase
     impression = Impression.new(name: "", position: 1)
 
     assert_not impression.valid?
-    assert_includes impression.errors[:name], "can't be blank"
+    assert_includes impression.errors[:name], "を入力してください"
   end
 
   test "nameがnilの場合は無効" do
@@ -24,14 +24,14 @@ class ImpressionTest < ActiveSupport::TestCase
     impression = Impression.new(name: "いつも支えてくれる", position: nil)
 
     assert_not impression.valid?
-    assert_includes impression.errors[:position], "can't be blank"
+    assert_includes impression.errors[:position], "を入力してください"
   end
 
   test "positionが整数でない場合は無効" do
     impression = Impression.new(name: "いつも支えてくれる", position: 1.5)
 
     assert_not impression.valid?
-    assert_includes impression.errors[:position], "must be an integer"
+    assert_includes impression.errors[:position], "は整数で入力してください"
   end
 
   test "default_scopeでpositionの昇順に並ぶ" do

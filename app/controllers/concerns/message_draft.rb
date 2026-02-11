@@ -34,6 +34,15 @@ module MessageDraft
     end
   end
 
+  def text_too_long?(step, field, value, max_length)
+    return false unless value.length > max_length
+
+    instance_variable_set(:"@#{field}", value)
+    @error_message = "#{Message.human_attribute_name(field)}は#{max_length}文字以内で入力してください"
+    render step
+    true
+  end
+
   def build_message_from_draft
     message = Message.new(
       recipient_id: draft["recipient_id"],

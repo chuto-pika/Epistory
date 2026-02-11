@@ -139,6 +139,14 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to step5_message_path
   end
 
+  test "save_step4 rejects episode exceeding max length" do
+    complete_steps_one_to_three
+    post step4_message_path, params: { episode: "あ" * (Message::EPISODE_MAX_LENGTH + 1) }
+
+    assert_response :success
+    assert_select "textarea[name='episode']"
+  end
+
   # === step5 ===
   test "step5 redirects to step1 when previous steps not completed" do
     get step5_message_path
@@ -206,6 +214,17 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     message = Message.last
 
     assert_redirected_to message_path(message)
+  end
+
+  test "save_step6 rejects additional_message exceeding max length" do
+    complete_steps_one_to_five
+
+    assert_no_difference "Message.count" do
+      post step6_message_path, params: { additional_message: "あ" * (Message::ADDITIONAL_MESSAGE_MAX_LENGTH + 1) }
+    end
+
+    assert_response :success
+    assert_select "textarea[name='additional_message']"
   end
 
   # === show ===

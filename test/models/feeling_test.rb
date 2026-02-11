@@ -11,7 +11,7 @@ class FeelingTest < ActiveSupport::TestCase
     feeling = Feeling.new(name: "", position: 1)
 
     assert_not feeling.valid?
-    assert_includes feeling.errors[:name], "can't be blank"
+    assert_includes feeling.errors[:name], "を入力してください"
   end
 
   test "nameがnilの場合は無効" do
@@ -24,14 +24,14 @@ class FeelingTest < ActiveSupport::TestCase
     feeling = Feeling.new(name: "ありがとう", position: nil)
 
     assert_not feeling.valid?
-    assert_includes feeling.errors[:position], "can't be blank"
+    assert_includes feeling.errors[:position], "を入力してください"
   end
 
   test "positionが整数でない場合は無効" do
     feeling = Feeling.new(name: "ありがとう", position: 1.5)
 
     assert_not feeling.valid?
-    assert_includes feeling.errors[:position], "must be an integer"
+    assert_includes feeling.errors[:position], "は整数で入力してください"
   end
 
   test "default_scopeでpositionの昇順に並ぶ" do

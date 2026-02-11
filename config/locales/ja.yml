@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    models:
+      message: メッセージ
+    attributes:
+      message:
+        recipient: 相手
+        occasion: きっかけ
+        feeling: 気持ち
+        episode: エピソード
+        additional_message: 追加メッセージ
+    errors:
+      models:
+        message:
+          attributes:
+            recipient:
+              required: "を選んでください"
+            occasion:
+              required: "を選んでください"
+            feeling:
+              required: "を選んでください"
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      blank: "を入力してください"
+      required: "を選んでください"
+      too_long: "は%{count}文字以内で入力してください"
+      not_a_number: "は数値で入力してください"
+      not_an_integer: "は整数で入力してください"

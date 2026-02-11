@@ -27,7 +27,7 @@ class MessageTest < ActiveSupport::TestCase
     )
 
     assert_not message.valid?
-    assert_includes message.errors[:recipient], "must exist"
+    assert_includes message.errors[:recipient], "を選んでください"
   end
 
   test "occasionが未設定の場合は無効" do
@@ -38,7 +38,7 @@ class MessageTest < ActiveSupport::TestCase
     )
 
     assert_not message.valid?
-    assert_includes message.errors[:occasion], "must exist"
+    assert_includes message.errors[:occasion], "を選んでください"
   end
 
   test "feelingが未設定の場合は無効" do
@@ -49,7 +49,7 @@ class MessageTest < ActiveSupport::TestCase
     )
 
     assert_not message.valid?
-    assert_includes message.errors[:feeling], "must exist"
+    assert_includes message.errors[:feeling], "を選んでください"
   end
 
   test "impressionsを関連付けできる" do
@@ -95,5 +95,51 @@ class MessageTest < ActiveSupport::TestCase
     )
 
     assert_predicate message, :valid?
+  end
+
+  test "episodeが500文字以内なら有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      episode: "あ" * 500
+    )
+
+    assert_predicate message, :valid?
+  end
+
+  test "episodeが501文字以上なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      episode: "あ" * 501
+    )
+
+    assert_not message.valid?
+    assert_includes message.errors[:episode], "は500文字以内で入力してください"
+  end
+
+  test "additional_messageが200文字以内なら有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      additional_message: "あ" * 200
+    )
+
+    assert_predicate message, :valid?
+  end
+
+  test "additional_messageが201文字以上なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      additional_message: "あ" * 201
+    )
+
+    assert_not message.valid?
+    assert_includes message.errors[:additional_message], "は200文字以内で入力してください"
   end
 end

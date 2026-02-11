@@ -42,10 +42,7 @@ class MessagesController < ApplicationController
   end
 
   def step2
-    unless session.dig(:message_draft, "recipient_id")
-      redirect_to step1_message_path
-      return
-    end
+    return redirect_to step1_message_path unless session.dig(:message_draft, "recipient_id")
 
     @occasions = Occasion.all
     @selected_id = session.dig(:message_draft, "occasion_id")
@@ -88,7 +85,10 @@ class MessagesController < ApplicationController
   end
 
   def save_step4
-    save_draft("episode", params[:episode].to_s.strip)
+    episode = params[:episode].to_s.strip
+    return if text_too_long?(:step4, :episode, episode, Message::EPISODE_MAX_LENGTH)
+
+    save_draft("episode", episode)
     redirect_to step5_message_path
   end
 
@@ -116,7 +116,13 @@ class MessagesController < ApplicationController
   end
 
   def save_step6
-    save_draft("additional_message", params[:additional_message].to_s.strip)
+    additional_message = params[:additional_message].to_s.strip
+    if text_too_long?(:step6, :additional_message, additional_message,
+                      Message::ADDITIONAL_MESSAGE_MAX_LENGTH)
+      return
+    end
+
+    save_draft("additional_message", additional_message)
     create_message_from_draft
   end
 end

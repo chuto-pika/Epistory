@@ -6,6 +6,8 @@
       <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2"><%= title %></h1>
       <p class="text-sub-text font-light"><%= subtitle %></p>
     </div>
+    <%= render "messages/error_message", message: flash[:alert] if flash[:alert] %>
+    <%= render "messages/error_message", message: @error_message if @error_message %>
     <%= yield %>
   </div>
 </section>

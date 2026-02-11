@@ -1,9 +1,14 @@
 <%= render layout: "messages/step_layout", locals: { current_step: 4, title: "エピソードを教えてください", subtitle: "相手との思い出やエピソードがあれば書いてください。（任意）" } do %>
   <%= form_with url: step4_message_path, method: :post, class: "space-y-6" do |f| %>
-    <div>
+    <div data-controller="char-counter" data-char-counter-max-value="<%= Message::EPISODE_MAX_LENGTH %>">
       <textarea name="episode" rows="6"
+                data-char-counter-target="input"
+                data-action="input->char-counter#update"
                 class="w-full p-4 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
                 placeholder="例：先月、仕事で落ち込んでいた時にそっと話を聞いてくれた"><%= @episode %></textarea>
+      <p class="text-right text-sm text-sub-text mt-1" data-char-counter-target="counter">
+        <span data-char-counter-target="current">0</span> / <%= Message::EPISODE_MAX_LENGTH %>
+      </p>
     </div>
 
     <div class="p-4 rounded-xl bg-background-dark/50">

@@ -11,7 +11,7 @@ class OccasionTest < ActiveSupport::TestCase
     occasion = Occasion.new(name: "", position: 1)
 
     assert_not occasion.valid?
-    assert_includes occasion.errors[:name], "can't be blank"
+    assert_includes occasion.errors[:name], "を入力してください"
   end
 
   test "nameがnilの場合は無効" do
@@ -24,14 +24,14 @@ class OccasionTest < ActiveSupport::TestCase
     occasion = Occasion.new(name: "誕生日・記念日", position: nil)
 
     assert_not occasion.valid?
-    assert_includes occasion.errors[:position], "can't be blank"
+    assert_includes occasion.errors[:position], "を入力してください"
   end
 
   test "positionが整数でない場合は無効" do
     occasion = Occasion.new(name: "誕生日・記念日", position: 1.5)
 
     assert_not occasion.valid?
-    assert_includes occasion.errors[:position], "must be an integer"
+    assert_includes occasion.errors[:position], "は整数で入力してください"
   end
 
   test "default_scopeでpositionの昇順に並ぶ" do

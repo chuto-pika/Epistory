@@ -11,7 +11,7 @@ class RecipientTest < ActiveSupport::TestCase
     recipient = Recipient.new(name: "", position: 1)
 
     assert_not recipient.valid?
-    assert_includes recipient.errors[:name], "can't be blank"
+    assert_includes recipient.errors[:name], "を入力してください"
   end
 
   test "nameがnilの場合は無効" do
@@ -24,14 +24,14 @@ class RecipientTest < ActiveSupport::TestCase
     recipient = Recipient.new(name: "親", position: nil)
 
     assert_not recipient.valid?
-    assert_includes recipient.errors[:position], "can't be blank"
+    assert_includes recipient.errors[:position], "を入力してください"
   end
 
   test "positionが整数でない場合は無効" do
     recipient = Recipient.new(name: "親", position: 1.5)
 
     assert_not recipient.valid?
-    assert_includes recipient.errors[:position], "must be an integer"
+    assert_includes recipient.errors[:position], "は整数で入力してください"
   end
 
   test "default_scopeでpositionの昇順に並ぶ" do
