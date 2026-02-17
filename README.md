@@ -1,6 +1,8 @@
 ## サービス名
 Epistory
 
+[![CI](https://github.com/chuto-pika/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/chuto-pika/portfolio/actions/workflows/ci.yml)
+
 ---
 
 ## サービス概要
