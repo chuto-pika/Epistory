@@ -57,7 +57,7 @@ jobs:
           bundler-cache: true
 
       - name: Database setup
-        run: bin/rails db:prepare
+        run: bundle exec rails db:prepare
 
       - name: Run tests
-        run: bin/rails test
+        run: bundle exec rails test
