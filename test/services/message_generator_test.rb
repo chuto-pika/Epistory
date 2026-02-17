@@ -100,35 +100,45 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     message = build_message(occasion: @occasion_birthday, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/特別な日に/, result)
+    templates = MessageGenerator::OCCASION_TEMPLATES["誕生日・記念日"]
+
+    assert templates.any? { |t| result.include?(t) }, "導入文がいずれかのテンプレートにマッチすること"
   end
 
   test "日頃の感謝の導入文が生成される" do
     message = build_message(occasion: @occasion_thanks, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/改めて気持ちを伝えたく/, result)
+    templates = MessageGenerator::OCCASION_TEMPLATES["日頃の感謝"]
+
+    assert templates.any? { |t| result.include?(t) }, "導入文がいずれかのテンプレートにマッチすること"
   end
 
   test "最近助けてもらったの導入文が生成される" do
     message = build_message(occasion: @occasion_helped, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/助けてもらったことがあって/, result)
+    templates = MessageGenerator::OCCASION_TEMPLATES["最近助けてもらった"]
+
+    assert templates.any? { |t| result.include?(t) }, "導入文がいずれかのテンプレートにマッチすること"
   end
 
   test "しばらく会えていないの導入文が生成される" do
     message = build_message(occasion: @occasion_apart, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/しばらく会えていないけれど/, result)
+    templates = MessageGenerator::OCCASION_TEMPLATES["しばらく会えていない"]
+
+    assert templates.any? { |t| result.include?(t) }, "導入文がいずれかのテンプレートにマッチすること"
   end
 
   test "特別な理由はないの導入文が生成される" do
     message = build_message(occasion: @occasion_noreason, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/特別な理由はないけれど/, result)
+    templates = MessageGenerator::OCCASION_TEMPLATES["特別な理由はない"]
+
+    assert templates.any? { |t| result.include?(t) }, "導入文がいずれかのテンプレートにマッチすること"
   end
 
   test "その他のoccasionの導入文が生成される" do
@@ -140,50 +150,72 @@ class MessageGeneratorTest < ActiveSupport::TestCase
 
   # --- impressions ---
 
-  test "impression1つの場合は自然な文章になる" do
+  test "impression1つの場合は描写テンプレートが使われる" do
     message = build_message(impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/いつも支えてくれる、そんな存在です。/, result)
+    templates = MessageGenerator::IMPRESSION_TEMPLATES["いつも支えてくれる"]
+
+    assert templates.any? { |t| result.include?(t) }, "印象描写がテンプレートにマッチすること"
   end
 
-  test "impression2つの場合は自然に結合される" do
+  test "impression2つの場合は両方の描写が含まれる" do
     message = build_message(impressions: [@impression1, @impression2])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/いつも支えてくれる、そして一緒にいると安心する。そんな存在です。/, result)
+    templates1 = MessageGenerator::IMPRESSION_TEMPLATES["いつも支えてくれる"]
+    templates2 = MessageGenerator::IMPRESSION_TEMPLATES["一緒にいると安心する"]
+
+    assert templates1.any? { |t| result.include?(t) }, "1つ目の印象描写が含まれること"
+    assert templates2.any? { |t| result.include?(t) }, "2つ目の印象描写が含まれること"
   end
 
-  test "impression3つの場合は自然に結合される" do
+  test "impression3つの場合は全ての描写が含まれる" do
     message = build_message(impressions: [@impression1, @impression2, @impression3])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/いつも支えてくれる、一緒にいると安心する、そして笑顔にしてくれる。そんな存在です。/, result)
+    templates1 = MessageGenerator::IMPRESSION_TEMPLATES["いつも支えてくれる"]
+    templates2 = MessageGenerator::IMPRESSION_TEMPLATES["一緒にいると安心する"]
+    templates3 = MessageGenerator::IMPRESSION_TEMPLATES["笑顔にしてくれる"]
+
+    assert templates1.any? { |t| result.include?(t) }, "1つ目の印象描写が含まれること"
+    assert templates2.any? { |t| result.include?(t) }, "2つ目の印象描写が含まれること"
+    assert templates3.any? { |t| result.include?(t) }, "3つ目の印象描写が含まれること"
   end
 
   test "impressionが0個の場合は印象セクションが含まれない" do
     message = build_message(impressions: [])
     result = MessageGenerator.new(message).generate
 
-    assert_no_match(/そんな存在です/, result)
+    MessageGenerator::IMPRESSION_TEMPLATES.each_value do |templates|
+      templates.each do |t|
+        assert_not_includes result, t
+      end
+    end
   end
 
   # --- episode ---
 
-  test "エピソードが含まれる" do
+  test "エピソードが含まれ導入文と接続文が付与される" do
     message = build_message(impressions: [@impression1], episode: "先日、体調を崩したときにそばにいてくれました。")
     result = MessageGenerator.new(message).generate
 
     assert_match(/先日、体調を崩したときにそばにいてくれました。/, result)
+    intros = MessageGenerator::EPISODE_INTROS
+    outros = MessageGenerator::EPISODE_OUTROS
+
+    assert intros.any? { |t| result.include?(t) }, "エピソード導入文が含まれること"
+    assert outros.any? { |t| result.include?(t) }, "エピソード接続文が含まれること"
   end
 
   test "エピソードが空の場合はエピソードセクションが含まれない" do
     message = build_message(impressions: [@impression1], episode: nil)
     result = MessageGenerator.new(message).generate
 
-    # 導入文 + 印象 + 締めのみ
     assert_match(/お父さん・お母さんへ/, result)
-    assert_match(/そんな存在です/, result)
+    MessageGenerator::EPISODE_INTROS.each do |intro|
+      assert_not_includes result, intro
+    end
   end
 
   # --- feeling ---
@@ -192,35 +224,45 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     message = build_message(feeling: @feeling_thanks, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/本当にありがとう/, result)
+    templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"]
+
+    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "これからもよろしくの締めくくりが生成される" do
     message = build_message(feeling: @feeling_yoroshiku, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/これからもよろしくね/, result)
+    templates = MessageGenerator::FEELING_TEMPLATES["これからもよろしく"]
+
+    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "いつも助かっているの締めくくりが生成される" do
     message = build_message(feeling: @feeling_tasukaru, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/いつも本当に助かっています/, result)
+    templates = MessageGenerator::FEELING_TEMPLATES["いつも助かっている"]
+
+    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "大切に思っているの締めくくりが生成される" do
     message = build_message(feeling: @feeling_taisetsu, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/大切に思っています/, result)
+    templates = MessageGenerator::FEELING_TEMPLATES["大切に思っている"]
+
+    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "ごめんね、そしてありがとうの締めくくりが生成される" do
     message = build_message(feeling: @feeling_gomenne, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    assert_match(/ごめんね。そして、いつもありがとう/, result)
+    templates = MessageGenerator::FEELING_TEMPLATES["ごめんね、そしてありがとう"]
+
+    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   # --- additional_message ---
@@ -253,10 +295,18 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     result = MessageGenerator.new(message).generate
 
     assert_match(/お父さん・お母さんへ/, result)
-    assert_match(/特別な日に/, result)
-    assert_match(/いつも支えてくれる、そして一緒にいると安心する/, result)
+    occasion_templates = MessageGenerator::OCCASION_TEMPLATES["誕生日・記念日"]
+
+    assert occasion_templates.any? { |t| result.include?(t) }, "導入文が含まれること"
+    imp1_templates = MessageGenerator::IMPRESSION_TEMPLATES["いつも支えてくれる"]
+    imp2_templates = MessageGenerator::IMPRESSION_TEMPLATES["一緒にいると安心する"]
+
+    assert imp1_templates.any? { |t| result.include?(t) }, "印象1の描写が含まれること"
+    assert imp2_templates.any? { |t| result.include?(t) }, "印象2の描写が含まれること"
     assert_match(/いつも応援してくれてありがとう。/, result)
-    assert_match(/本当にありがとう/, result)
+    feeling_templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"]
+
+    assert feeling_templates.any? { |t| result.include?(t) }, "締めくくりが含まれること"
     assert_match(/P\.S\. また帰るね。/, result)
   end
 
@@ -267,10 +317,34 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     result1 = MessageGenerator.new(msg1).generate
     result2 = MessageGenerator.new(msg2).generate
 
-    assert_match(/特別な日に/, result1)
-    assert_match(/しばらく会えていないけれど/, result2)
-    # 両方にパートナーの呼称が含まれる
+    templates1 = MessageGenerator::OCCASION_TEMPLATES["誕生日・記念日"]
+    templates2 = MessageGenerator::OCCASION_TEMPLATES["しばらく会えていない"]
+
+    assert templates1.any? { |t| result1.include?(t) }, "誕生日の導入文が含まれること"
+    assert templates2.any? { |t| result2.include?(t) }, "しばらく会えていないの導入文が含まれること"
     assert_match(/あなたへ/, result1)
     assert_match(/あなたへ/, result2)
+  end
+
+  # --- バリエーションテスト ---
+
+  test "同じ入力でも生成構造が正しい" do
+    message = build_message(
+      recipient: @recipient_parent,
+      occasion: @occasion_thanks,
+      feeling: @feeling_thanks,
+      impressions: [@impression1],
+      episode: "テストエピソード"
+    )
+
+    results = 5.times.map { MessageGenerator.new(message).generate }
+
+    results.each do |result|
+      assert_match(/お父さん・お母さんへ/, result)
+      imp_templates = MessageGenerator::IMPRESSION_TEMPLATES["いつも支えてくれる"]
+
+      assert imp_templates.any? { |t| result.include?(t) }, "印象描写が含まれること"
+      assert_match(/テストエピソード/, result)
+    end
   end
 end
