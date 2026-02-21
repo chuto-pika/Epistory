@@ -28,13 +28,16 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     @feeling_gomenne = Feeling.find_or_create_by!(name: "ごめんね、そしてありがとう", position: 5)
   end
 
-  def build_message(recipient: nil, occasion: nil, feeling: nil, impressions: [], episode: nil, additional_message: nil)
+  def build_message(recipient: nil, occasion: nil, feeling: nil,
+                    impressions: [], episode: nil, additional_message: nil,
+                    recipient_name: nil)
     msg = Message.create!(
       recipient: recipient || @recipient_parent,
       occasion: occasion || @occasion_thanks,
       feeling: feeling || @feeling_thanks,
       episode: episode,
-      additional_message: additional_message
+      additional_message: additional_message,
+      recipient_name: recipient_name
     )
     impressions.each { |imp| msg.impressions << imp }
     msg
@@ -92,6 +95,21 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     result = MessageGenerator.new(message).generate
 
     assert_no_match(/へ\n/, result)
+  end
+
+  test "recipient_nameが指定されている場合はその宛名が使われる" do
+    message = build_message(recipient: @recipient_parent, impressions: [@impression1], recipient_name: "お母さん")
+    result = MessageGenerator.new(message).generate
+
+    assert_match(/お母さんへ/, result)
+    assert_no_match(/お父さん・お母さんへ/, result)
+  end
+
+  test "recipient_nameが空の場合はHONORIFICSフォールバックが使われる" do
+    message = build_message(recipient: @recipient_parent, impressions: [@impression1], recipient_name: nil)
+    result = MessageGenerator.new(message).generate
+
+    assert_match(/お父さん・お母さんへ/, result)
   end
 
   # --- occasion に応じた導入文 ---

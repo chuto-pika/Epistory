@@ -10,4 +10,5 @@ class Message < ApplicationRecord
 
   validates :episode, length: { maximum: EPISODE_MAX_LENGTH }
   validates :additional_message, length: { maximum: ADDITIONAL_MESSAGE_MAX_LENGTH }
+  validates :recipient_name, length: { maximum: 20 }
 end
