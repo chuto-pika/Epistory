@@ -1,11 +1,12 @@
 <%= render layout: "messages/step_layout", locals: { current_step: 5, title: "どんな気持ちを届けますか？", subtitle: "一番伝えたい気持ちを選んでください。" } do %>
-  <%= form_with url: step5_message_path, method: :post, class: "space-y-4" do |f| %>
+  <%= form_with url: step5_message_path, method: :post, class: "space-y-4", data: { controller: "auto-advance" } do |f| %>
     <% @feelings.each do |feeling| %>
       <%= render "messages/selection_card",
                  name: "feeling_id",
                  value: feeling.id,
                  label: feeling.name,
-                 checked: @selected_id == feeling.id %>
+                 checked: @selected_id == feeling.id,
+                 action: "change->auto-advance#advance" %>
     <% end %>
 
     <div class="flex gap-4 pt-6">

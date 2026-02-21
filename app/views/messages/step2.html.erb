@@ -1,11 +1,12 @@
 <%= render layout: "messages/step_layout", locals: { current_step: 2, title: "どんなきっかけですか？", subtitle: "メッセージを届けたいきっかけを選んでください。" } do %>
-  <%= form_with url: step2_message_path, method: :post, class: "space-y-4" do |f| %>
+  <%= form_with url: step2_message_path, method: :post, class: "space-y-4", data: { controller: "auto-advance" } do |f| %>
     <% @occasions.each do |occasion| %>
       <%= render "messages/selection_card",
                  name: "occasion_id",
                  value: occasion.id,
                  label: occasion.name,
-                 checked: @selected_id == occasion.id %>
+                 checked: @selected_id == occasion.id,
+                 action: "change->auto-advance#advance" %>
     <% end %>
 
     <div class="flex gap-4 pt-6">
