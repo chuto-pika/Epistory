@@ -130,8 +130,12 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
   private
 
   def opening
-    hon = HONORIFICS[@recipient.name]
-    prefix = hon ? "#{hon}へ\n\n" : ""
+    prefix = if @message.recipient_name.present?
+               "#{@message.recipient_name}へ\n\n"
+             else
+               hon = HONORIFICS[@recipient.name]
+               hon ? "#{hon}へ\n\n" : ""
+             end
     templates = OCCASION_TEMPLATES[@occasion.name]
     body = if templates
              templates.sample

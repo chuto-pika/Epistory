@@ -1,15 +1,45 @@
 <%= render layout: "messages/step_layout", locals: { current_step: 1, title: "誰に届けますか？", subtitle: "メッセージを届けたい相手を選んでください。" } do %>
-  <%= form_with url: step1_message_path, method: :post, class: "space-y-4" do |f| %>
+  <%
+    chip_data = {
+      "親" => ["お父さん", "お母さん"],
+      "兄弟・姉妹" => ["お兄ちゃん", "お姉ちゃん"],
+      "祖父母" => ["おじいちゃん", "おばあちゃん"]
+    }
+  %>
+  <%= form_with url: step1_message_path, method: :post, class: "space-y-4",
+                data: { controller: "recipient-name", "recipient-name-chips-value": chip_data.to_json } do |f| %>
     <% @recipients.each do |recipient| %>
       <%= render "messages/selection_card",
                  name: "recipient_id",
                  value: recipient.id,
                  label: recipient.name,
-                 checked: @selected_id == recipient.id %>
+                 checked: @selected_id == recipient.id,
+                 action: "change->recipient-name#selectCategory" %>
     <% end %>
 
+    <div data-recipient-name-target="nameSection" class="hidden space-y-4 pt-2">
+      <p class="text-sub-text font-light text-sm">どう呼んでいますか？（宛名に使います）</p>
+
+      <div data-recipient-name-target="chipContainer" class="flex flex-wrap gap-2"></div>
+
+      <div>
+        <input type="text"
+               data-recipient-name-target="nameInput"
+               data-action="input->recipient-name#inputName"
+               placeholder="自由に入力（例：ママ、太郎くん）"
+               maxlength="20"
+               class="w-full px-4 py-3 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text
+                      focus:border-primary focus:outline-none transition-all"
+               <% if @selected_name.present? %>value="<%= @selected_name %>"<% end %>>
+      </div>
+
+      <input type="hidden" name="recipient_name" data-recipient-name-target="hiddenInput"
+             <% if @selected_name.present? %>value="<%= @selected_name %>"<% end %>>
+    </div>
+
     <div class="pt-6">
-      <button type="submit" class="w-full h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+      <button type="submit" data-recipient-name-target="submitButton"
+              class="w-full h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
         次へ進む
       </button>
     </div>

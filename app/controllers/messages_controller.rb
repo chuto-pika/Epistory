@@ -29,6 +29,7 @@ class MessagesController < ApplicationController
   def step1
     @recipients = Recipient.all
     @selected_id = session.dig(:message_draft, "recipient_id")
+    @selected_name = session.dig(:message_draft, "recipient_name")
   end
 
   def save_step1
@@ -38,6 +39,7 @@ class MessagesController < ApplicationController
     end
 
     save_draft("recipient_id", params[:recipient_id].to_i)
+    save_draft("recipient_name", params[:recipient_name].to_s.strip)
     redirect_to step2_message_path
   end
 

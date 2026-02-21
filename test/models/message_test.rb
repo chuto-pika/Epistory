@@ -142,4 +142,38 @@ class MessageTest < ActiveSupport::TestCase
     assert_not message.valid?
     assert_includes message.errors[:additional_message], "は200文字以内で入力してください"
   end
+
+  test "recipient_nameが20文字以内なら有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      recipient_name: "あ" * 20
+    )
+
+    assert_predicate message, :valid?
+  end
+
+  test "recipient_nameが21文字以上なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      recipient_name: "あ" * 21
+    )
+
+    assert_not message.valid?
+    assert_includes message.errors[:recipient_name], "は20文字以内で入力してください"
+  end
+
+  test "recipient_nameはnullでも有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      recipient_name: nil
+    )
+
+    assert_predicate message, :valid?
+  end
 end

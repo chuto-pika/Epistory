@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_06_171209) do
+ActiveRecord::Schema[7.0].define(version: 2026_02_21_074005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_06_171209) do
     t.text "edited_content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "recipient_name"
     t.index ["feeling_id"], name: "index_messages_on_feeling_id"
     t.index ["occasion_id"], name: "index_messages_on_occasion_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"

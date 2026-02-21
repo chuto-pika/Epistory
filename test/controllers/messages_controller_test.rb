@@ -23,6 +23,13 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to step2_message_path
   end
 
+  test "save_step1 saves recipient_name in session" do
+    recipient = recipients(:parent)
+    post step1_message_path, params: { recipient_id: recipient.id, recipient_name: "お母さん" }
+
+    assert_redirected_to step2_message_path
+  end
+
   test "save_step1 redirects back when no recipient selected" do
     post step1_message_path, params: { recipient_id: "" }
 

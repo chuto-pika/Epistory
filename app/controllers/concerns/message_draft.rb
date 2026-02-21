@@ -49,7 +49,8 @@ module MessageDraft
       occasion_id: draft["occasion_id"],
       feeling_id: draft["feeling_id"],
       episode: draft["episode"].presence,
-      additional_message: draft["additional_message"].presence
+      additional_message: draft["additional_message"].presence,
+      recipient_name: draft["recipient_name"].presence
     )
     message.impression_ids = draft["impression_ids"]
     message
