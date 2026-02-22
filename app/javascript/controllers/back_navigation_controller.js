@@ -4,10 +4,11 @@ export default class extends Controller {
   static values = { step6Url: String }
 
   connect() {
-    // ブラウザの「戻る」ボタンでStep 6に戻るよう履歴を操作する
-    // history: [..., X, show] → [..., X, step6, show]
-    const currentUrl = window.location.href
-    history.replaceState(null, "", this.step6UrlValue)
-    history.pushState(null, "", currentUrl)
+    this._handlePopstate = () => { window.location.href = this.step6UrlValue }
+    window.addEventListener("popstate", this._handlePopstate)
+  }
+
+  disconnect() {
+    window.removeEventListener("popstate", this._handlePopstate)
   }
 }
