@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fdfaf1"/>
+      <stop offset="100%" style="stop-color:#f5f0e1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative accent bar at top -->
+  <rect x="0" y="0" width="1200" height="6" fill="#c06c5e"/>
+
+  <!-- Decorative circle -->
+  <circle cx="1050" cy="150" r="120" fill="#c06c5e" opacity="0.08"/>
+  <circle cx="150" cy="500" r="80" fill="#c06c5e" opacity="0.06"/>
+
+  <!-- App name -->
+  <text x="600" y="240" text-anchor="middle" font-family="Inter, 'Noto Sans JP', sans-serif" font-size="72" font-weight="700" fill="#4a3728" letter-spacing="2">Epistory</text>
+
+  <!-- Divider line -->
+  <line x1="520" y1="280" x2="680" y2="280" stroke="#c06c5e" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Tagline -->
+  <text x="600" y="340" text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="36" font-weight="400" fill="#4a3728">言葉にできなかった想いを、</text>
+  <text x="600" y="395" text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="36" font-weight="400" fill="#c06c5e" font-style="italic">かたちに</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="470" text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="22" font-weight="300" fill="#6b5a4d">質問に答えるだけで、大切な人への感謝メッセージが完成</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="624" width="1200" height="6" fill="#c06c5e"/>
+</svg>
