@@ -3,10 +3,6 @@ module MessageDraft
 
   private
 
-  def set_message
-    @message = Message.find(params[:id])
-  end
-
   def save_draft(key, value)
     session[:message_draft] ||= {}
     session[:message_draft][key] = value
@@ -31,23 +27,11 @@ module MessageDraft
     message = build_message_from_draft
     if message.save
       message.update(generated_content: MessageGenerator.new(message).generate)
-      restore_draft_from_message(message)
+      session.delete(:message_draft)
       redirect_to message_path(message)
     else
       redirect_to step1_message_path, alert: "メッセージの作成に失敗しました"
     end
-  end
-
-  def restore_draft_from_message(message)
-    session[:message_draft] = {
-      "recipient_id" => message.recipient_id,
-      "recipient_name" => message.recipient_name.to_s,
-      "occasion_id" => message.occasion_id,
-      "impression_ids" => message.impression_ids.map(&:to_i),
-      "feeling_id" => message.feeling_id,
-      "episode" => message.episode.to_s,
-      "additional_message" => message.additional_message.to_s
-    }
   end
 
   def text_too_long?(step, field, value, max_length)
