@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root "pages#home"
   get "/terms", to: "pages#terms"
+  get "/privacy", to: "pages#privacy"
 
   resource :message, only: [:new] do
     collection do
