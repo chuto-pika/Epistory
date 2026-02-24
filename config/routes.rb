@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "/health", to: proc { [200, {}, ["ok"]] }
 
   root "pages#home"
+  get "/terms", to: "pages#terms"
 
   resource :message, only: [:new] do
     collection do
