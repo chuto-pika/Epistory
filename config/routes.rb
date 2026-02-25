@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   get "/terms", to: "pages#terms"
   get "/privacy", to: "pages#privacy"
 
+  get "/contact", to: "contacts#new", as: :contact
+  post "/contact", to: "contacts#create"
+  get "/contact/complete", to: "contacts#complete", as: :contact_complete
+
   resource :message, only: [:new] do
     collection do
       get  :step1

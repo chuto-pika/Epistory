@@ -1,0 +1,69 @@
+<section class="py-16 px-6">
+  <div class="mx-auto max-w-3xl">
+    <div class="mb-12">
+      <p class="text-primary text-sm font-bold tracking-[0.2em] uppercase mb-3">Contact</p>
+      <h1 class="text-3xl lg:text-4xl font-bold text-main-text mb-4">お問い合わせ</h1>
+      <p class="text-sub-text text-sm">ご質問・ご要望がありましたら、下記フォームよりお気軽にお問い合わせください。</p>
+    </div>
+
+    <div class="bg-white/60 rounded-2xl border border-primary/10 shadow-sm p-8 lg:p-12">
+
+      <% if @contact.errors.any? %>
+        <%= render "messages/error_message", message: "入力内容に誤りがあります。ご確認ください。" %>
+      <% end %>
+
+      <%= form_with model: @contact, url: contact_path, method: :post, class: "space-y-6" do |f| %>
+        <%# 名前 %>
+        <div>
+          <label for="contact_name" class="block text-sm font-bold text-main-text mb-2">お名前 <span class="text-red-500">*</span></label>
+          <%= f.text_field :name, id: "contact_name", placeholder: "山田 太郎",
+              class: "w-full p-4 rounded-xl border-2 #{@contact.errors[:name].any? ? 'border-red-300' : 'border-primary/10'} bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all" %>
+          <% if @contact.errors[:name].any? %>
+            <p class="text-red-500 text-sm mt-1"><%= @contact.errors.full_messages_for(:name).first %></p>
+          <% end %>
+        </div>
+
+        <%# メールアドレス %>
+        <div>
+          <label for="contact_email" class="block text-sm font-bold text-main-text mb-2">メールアドレス <span class="text-red-500">*</span></label>
+          <%= f.email_field :email, id: "contact_email", placeholder: "example@email.com",
+              class: "w-full p-4 rounded-xl border-2 #{@contact.errors[:email].any? ? 'border-red-300' : 'border-primary/10'} bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all" %>
+          <% if @contact.errors[:email].any? %>
+            <p class="text-red-500 text-sm mt-1"><%= @contact.errors.full_messages_for(:email).first %></p>
+          <% end %>
+        </div>
+
+        <%# お問い合わせ内容 %>
+        <div data-controller="char-counter" data-char-counter-max-value="<%= Contact::MESSAGE_MAX_LENGTH %>">
+          <label for="contact_message" class="block text-sm font-bold text-main-text mb-2">お問い合わせ内容 <span class="text-red-500">*</span></label>
+          <%= f.text_area :message, id: "contact_message", rows: 8, placeholder: "お問い合わせ内容をご記入ください",
+              data: { char_counter_target: "input", action: "input->char-counter#update" },
+              class: "w-full p-4 rounded-xl border-2 #{@contact.errors[:message].any? ? 'border-red-300' : 'border-primary/10'} bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none" %>
+          <div class="flex justify-between items-center mt-1">
+            <% if @contact.errors[:message].any? %>
+              <p class="text-red-500 text-sm"><%= @contact.errors.full_messages_for(:message).first %></p>
+            <% else %>
+              <span></span>
+            <% end %>
+            <p class="text-right text-sm text-sub-text" data-char-counter-target="counter">
+              <span data-char-counter-target="current">0</span> / <%= Contact::MESSAGE_MAX_LENGTH %>
+            </p>
+          </div>
+        </div>
+
+        <%# 送信ボタン %>
+        <div class="pt-4">
+          <button type="submit" class="w-full h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+            送信する
+          </button>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-8 text-center">
+      <%= link_to root_path, class: "inline-flex items-center gap-1 text-sub-text hover:text-primary transition-colors text-sm" do %>
+        <span class="material-symbols-outlined text-base">arrow_back</span>トップに戻る
+      <% end %>
+    </div>
+  </div>
+</section>
