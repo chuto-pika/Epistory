@@ -1,0 +1,4 @@
+valid_contact:
+  name: テストユーザー
+  email: test@example.com
+  message: テストのお問い合わせ内容です。
