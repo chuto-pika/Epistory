@@ -15,16 +15,19 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "meta_title returns content_for value when set" do
     content_for(:og_title, "カスタムタイトル")
+
     assert_equal "カスタムタイトル", meta_title
   end
 
   test "meta_description returns content_for value when set" do
     content_for(:og_description, "カスタム説明文")
+
     assert_equal "カスタム説明文", meta_description
   end
 
   test "meta_image returns content_for value when set" do
     content_for(:og_image, "https://example.com/custom.png")
+
     assert_equal "https://example.com/custom.png", meta_image
   end
 end
