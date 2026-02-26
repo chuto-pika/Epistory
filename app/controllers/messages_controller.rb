@@ -1,8 +1,10 @@
 class MessagesController < ApplicationController
   include MessageDraft
 
+  before_action :set_message, only: %i[show edit update restore]
+
   def show
-    @message = Message.find(params[:id])
+    restore_draft_from_message(@message)
   end
 
   def new
@@ -10,18 +12,14 @@ class MessagesController < ApplicationController
     redirect_to step1_message_path
   end
 
-  def edit
-    @message = Message.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @message = Message.find(params[:id])
     @message.update(edited_content: params[:message][:edited_content])
     redirect_to message_path(@message)
   end
 
   def restore
-    @message = Message.find(params[:id])
     @message.update(edited_content: nil)
     redirect_to edit_message_path(@message)
   end

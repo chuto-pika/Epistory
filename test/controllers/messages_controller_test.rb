@@ -245,6 +245,33 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show displays back button to step6" do
+    complete_steps_one_to_five
+    post step6_message_path, params: { additional_message: "" }
+    message = Message.last
+
+    get message_path(message)
+
+    assert_select "a[href='#{step6_message_path}'][aria-label='選択画面に戻る']"
+    assert_select "section[data-controller='back-navigation']"
+  end
+
+  test "show restores draft so back button navigates to step6" do
+    complete_steps_one_to_five
+    post step6_message_path, params: { additional_message: "" }
+    message = Message.last
+
+    # セッションが消えた状態からshowにアクセス
+    get message_path(message)
+
+    assert_response :success
+
+    # 戻るボタンのリンク先（step6）にアクセスできる
+    get step6_message_path
+
+    assert_response :success
+  end
+
   # === edit ===
   test "edit displays edit form" do
     message = create_message_via_steps
