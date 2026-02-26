@@ -1,7 +1,7 @@
-<%= render layout: "messages/step_layout", locals: { current_step: 2, title: "どんなきっかけですか？", subtitle: "メッセージを届けたいきっかけを選んでください。" } do %>
+<%= render layout: "messages/steps/step_layout", locals: { current_step: 2, title: "どんなきっかけですか？", subtitle: "メッセージを届けたいきっかけを選んでください。" } do %>
   <%= form_with url: step2_message_path, method: :post, class: "space-y-4", data: { controller: "auto-advance" } do |f| %>
     <% @occasions.each do |occasion| %>
-      <%= render "messages/selection_card",
+      <%= render "messages/steps/selection_card",
                  name: "occasion_id",
                  value: occasion.id,
                  label: occasion.name,

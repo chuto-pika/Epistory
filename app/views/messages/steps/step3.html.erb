@@ -1,8 +1,8 @@
-<%= render layout: "messages/step_layout", locals: { current_step: 3, title: "相手の印象は？", subtitle: "相手に対する印象を選んでください。（複数選択可）" } do %>
+<%= render layout: "messages/steps/step_layout", locals: { current_step: 3, title: "相手の印象は？", subtitle: "相手に対する印象を選んでください。（複数選択可）" } do %>
   <%= form_with url: step3_message_path, method: :post do |f| %>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <% @impressions.each do |impression| %>
-        <%= render "messages/checkbox_card",
+        <%= render "messages/steps/checkbox_card",
                    name: "impression_ids[]",
                    value: impression.id,
                    label: impression.name,

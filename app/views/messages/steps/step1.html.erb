@@ -1,4 +1,4 @@
-<%= render layout: "messages/step_layout", locals: { current_step: 1, title: "誰に届けますか？", subtitle: "メッセージを届けたい相手を選んでください。" } do %>
+<%= render layout: "messages/steps/step_layout", locals: { current_step: 1, title: "誰に届けますか？", subtitle: "メッセージを届けたい相手を選んでください。" } do %>
   <%
     chip_data = {
       "親" => ["お父さん", "お母さん"],
@@ -9,7 +9,7 @@
   <%= form_with url: step1_message_path, method: :post, class: "space-y-4",
                 data: { controller: "recipient-name", "recipient-name-chips-value": chip_data.to_json } do |f| %>
     <% @recipients.each do |recipient| %>
-      <%= render "messages/selection_card",
+      <%= render "messages/steps/selection_card",
                  name: "recipient_id",
                  value: recipient.id,
                  label: recipient.name,
