@@ -1,4 +1,4 @@
-<%= render layout: "messages/step_layout", locals: { current_step: 4, title: "エピソードを教えてください", subtitle: "相手との思い出やエピソードがあれば書いてください。（任意）" } do %>
+<%= render layout: "messages/steps/step_layout", locals: { current_step: 4, title: "エピソードを教えてください", subtitle: "相手との思い出やエピソードがあれば書いてください。（任意）" } do %>
   <%= form_with url: step4_message_path, method: :post, class: "space-y-6" do |f| %>
     <div data-controller="char-counter" data-char-counter-max-value="<%= Message::EPISODE_MAX_LENGTH %>">
       <textarea name="episode" rows="6"

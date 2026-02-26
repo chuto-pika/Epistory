@@ -1,4 +1,4 @@
-<%= render layout: "messages/step_layout", locals: { current_step: 6, title: "追加メッセージはありますか？", subtitle: "最後に伝えたいことがあれば書いてください。（任意）" } do %>
+<%= render layout: "messages/steps/step_layout", locals: { current_step: 6, title: "追加メッセージはありますか？", subtitle: "最後に伝えたいことがあれば書いてください。（任意）" } do %>
   <%= form_with url: step6_message_path, method: :post, class: "space-y-6" do |f| %>
     <div data-controller="char-counter" data-char-counter-max-value="<%= Message::ADDITIONAL_MESSAGE_MAX_LENGTH %>">
       <textarea name="additional_message" rows="4"
