@@ -3,6 +3,10 @@ module MessageDraft
 
   private
 
+  def set_message
+    @message = Message.find(params[:id])
+  end
+
   def save_draft(key, value)
     session[:message_draft] ||= {}
     session[:message_draft][key] = value
@@ -41,6 +45,18 @@ module MessageDraft
     @error_message = "#{Message.human_attribute_name(field)}は#{max_length}文字以内で入力してください"
     render step, status: :unprocessable_entity
     true
+  end
+
+  def restore_draft_from_message(message)
+    session[:message_draft] = {
+      "recipient_id" => message.recipient_id,
+      "recipient_name" => message.recipient_name,
+      "occasion_id" => message.occasion_id,
+      "impression_ids" => message.impression_ids,
+      "feeling_id" => message.feeling_id,
+      "episode" => message.episode,
+      "additional_message" => message.additional_message
+    }
   end
 
   def build_message_from_draft
