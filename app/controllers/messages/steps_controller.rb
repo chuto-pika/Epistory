@@ -2,6 +2,8 @@ module Messages
   class StepsController < ApplicationController
     include MessageDraft
 
+    before_action :check_creation_limit, only: [:save_step6]
+
     def step1
       @recipients = Recipient.all
       @selected_id = session.dig(:message_draft, "recipient_id")
@@ -102,6 +104,15 @@ module Messages
 
       save_draft("additional_message", additional_message)
       create_message_from_draft
+    end
+
+    private
+
+    def check_creation_limit
+      return if logged_in?
+      return unless session[:created_message_id]
+
+      redirect_to login_path, alert: "2つ目のメッセージを作成するにはログインが必要です"
     end
   end
 end
