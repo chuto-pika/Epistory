@@ -10,6 +10,17 @@
       <a href="#how-it-works" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">使い方</a>
       <a href="#why-epistory" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">Epistoryとは</a>
       <%= link_to "メッセージを作る", new_message_path, class: "bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm" %>
+      <% if logged_in? %>
+        <div class="flex items-center gap-3">
+          <% if current_user.avatar_url.present? %>
+            <img src="<%= current_user.avatar_url %>" alt="<%= current_user.name %>" class="h-8 w-8 rounded-full">
+          <% end %>
+          <span class="text-sm font-medium text-main-text"><%= current_user.name %></span>
+          <%= button_to "ログアウト", logout_path, method: :delete, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
+        </div>
+      <% else %>
+        <%= link_to "ログイン", login_path, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
+      <% end %>
     </nav>
     <div class="md:hidden">
       <span class="material-symbols-outlined text-main-text">menu</span>
