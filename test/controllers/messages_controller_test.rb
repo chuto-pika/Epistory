@@ -71,6 +71,57 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_nil message.reload.edited_content
   end
 
+  # === show is public ===
+  test "show is accessible without login" do
+    message = create_message_via_steps
+    # 新しいセッションでアクセス
+    reset!
+    get message_path(message)
+
+    assert_response :success
+  end
+
+  # === authorization ===
+  test "logged in user can edit own message" do
+    user = users(:alice)
+    sign_in_as(user)
+    message = create_message_via_steps
+
+    get edit_message_path(message)
+
+    assert_response :success
+  end
+
+  test "logged in user cannot edit others message" do
+    # aliceがメッセージ作成
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    # bobでログインし直す
+    reset!
+    sign_in_as(users(:bob))
+    get edit_message_path(message)
+
+    assert_redirected_to root_path
+  end
+
+  test "guest cannot edit message without session" do
+    message = create_message_via_steps
+    # セッションをリセット
+    reset!
+    get edit_message_path(message)
+
+    assert_redirected_to root_path
+  end
+
+  test "guest can edit message with session" do
+    message = create_message_via_steps
+
+    get edit_message_path(message)
+
+    assert_response :success
+  end
+
   private
 
   def complete_all_steps

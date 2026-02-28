@@ -2,6 +2,7 @@ class MessagesController < ApplicationController
   include MessageDraft
 
   before_action :set_message, only: %i[show edit update restore]
+  before_action :authorize_message!, only: %i[edit update restore]
 
   def show
     restore_draft_from_message(@message)
@@ -22,5 +23,21 @@ class MessagesController < ApplicationController
   def restore
     @message.update(edited_content: nil)
     redirect_to edit_message_path(@message)
+  end
+
+  private
+
+  def authorize_message!
+    return if message_owner?
+
+    redirect_to root_path, alert: "このメッセージを編集する権限がありません"
+  end
+
+  def message_owner?
+    if logged_in?
+      @message.user_id == current_user.id
+    else
+      session[:created_message_id] == @message.id
+    end
   end
 end

@@ -32,6 +32,7 @@ module MessageDraft
     if message.save
       message.update(generated_content: MessageGenerator.new(message).generate)
       session.delete(:message_draft)
+      session[:created_message_id] = message.id unless logged_in?
       redirect_to message_path(message)
     else
       redirect_to step1_message_path, alert: "メッセージの作成に失敗しました"
@@ -60,15 +61,20 @@ module MessageDraft
   end
 
   def build_message_from_draft
-    message = Message.new(
+    message = Message.new(message_draft_attributes)
+    message.impression_ids = draft["impression_ids"]
+    message
+  end
+
+  def message_draft_attributes
+    {
+      user_id: current_user&.id,
       recipient_id: draft["recipient_id"],
       occasion_id: draft["occasion_id"],
       feeling_id: draft["feeling_id"],
       episode: draft["episode"].presence,
       additional_message: draft["additional_message"].presence,
       recipient_name: draft["recipient_name"].presence
-    )
-    message.impression_ids = draft["impression_ids"]
-    message
+    }
   end
 end

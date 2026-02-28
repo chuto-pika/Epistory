@@ -228,6 +228,56 @@ module Messages
       assert_select "textarea[name='additional_message']"
     end
 
+    # === creation limit ===
+    test "guest can create first message" do
+      complete_steps_one_to_five
+
+      assert_difference "Message.count", 1 do
+        post step6_message_path, params: { additional_message: "" }
+      end
+
+      assert_redirected_to message_path(Message.last)
+    end
+
+    test "guest cannot create second message" do
+      # 1つ目を作成
+      complete_steps_one_to_five
+      post step6_message_path, params: { additional_message: "" }
+
+      # 2つ目を試みる
+      complete_steps_one_to_five
+
+      assert_no_difference "Message.count" do
+        post step6_message_path, params: { additional_message: "" }
+      end
+
+      assert_redirected_to login_path
+    end
+
+    test "logged in user can create multiple messages" do
+      sign_in_as(users(:alice))
+
+      # 1つ目
+      complete_steps_one_to_five
+      post step6_message_path, params: { additional_message: "" }
+
+      # 2つ目
+      complete_steps_one_to_five
+
+      assert_difference "Message.count", 1 do
+        post step6_message_path, params: { additional_message: "" }
+      end
+    end
+
+    test "message is associated with logged in user" do
+      user = users(:alice)
+      sign_in_as(user)
+      complete_steps_one_to_five
+      post step6_message_path, params: { additional_message: "" }
+
+      assert_equal user.id, Message.last.user_id
+    end
+
     private
 
     def complete_steps_one_to_three

@@ -38,6 +38,7 @@
 
 # Claude Code
 CLAUDE.md
+.claude/
 
 # Project documentation (local only)
 /docs/

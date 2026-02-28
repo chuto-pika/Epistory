@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   get "/health", to: proc { [200, {}, ["ok"]] }
 
   root "pages#home"
+
+  get "/login", to: "sessions#new", as: :login
+  delete "/logout", to: "sessions#destroy", as: :logout
+  get "/auth/:provider/callback", to: "sessions#create"
+  post "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/failure", to: "sessions#failure"
   get "/terms", to: "pages#terms"
   get "/privacy", to: "pages#privacy"
 
