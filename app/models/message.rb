@@ -2,6 +2,7 @@ class Message < ApplicationRecord
   EPISODE_MAX_LENGTH = 500
   ADDITIONAL_MESSAGE_MAX_LENGTH = 200
 
+  belongs_to :user, optional: true
   belongs_to :recipient
   belongs_to :occasion
   belongs_to :feeling
