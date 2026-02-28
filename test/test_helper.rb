@@ -31,6 +31,8 @@ module ActiveSupport
   end
 end
 
-class ActionDispatch::IntegrationTest
-  include AuthTestHelper
+module ActionDispatch
+  class IntegrationTest
+    include AuthTestHelper
+  end
 end

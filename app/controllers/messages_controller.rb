@@ -28,14 +28,16 @@ class MessagesController < ApplicationController
   private
 
   def authorize_message!
+    return if message_owner?
+
+    redirect_to root_path, alert: "このメッセージを編集する権限がありません"
+  end
+
+  def message_owner?
     if logged_in?
-      return if @message.user_id == current_user.id
-
-      redirect_to root_path, alert: "このメッセージを編集する権限がありません"
+      @message.user_id == current_user.id
     else
-      return if session[:created_message_id] == @message.id
-
-      redirect_to root_path, alert: "このメッセージを編集する権限がありません"
+      session[:created_message_id] == @message.id
     end
   end
 end

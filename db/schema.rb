@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_25_100000) do
+ActiveRecord::Schema[7.0].define(version: 2026_02_28_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_25_100000) do
     t.index ["feeling_id"], name: "index_messages_on_feeling_id"
     t.index ["occasion_id"], name: "index_messages_on_occasion_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "occasions", force: :cascade do |t|
@@ -77,9 +78,22 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_25_100000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "avatar_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
+  end
+
   add_foreign_key "message_impressions", "impressions"
   add_foreign_key "message_impressions", "messages"
   add_foreign_key "messages", "feelings"
   add_foreign_key "messages", "occasions"
   add_foreign_key "messages", "recipients"
+  add_foreign_key "messages", "users"
 end

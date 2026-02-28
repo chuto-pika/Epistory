@@ -61,7 +61,13 @@ module MessageDraft
   end
 
   def build_message_from_draft
-    message = Message.new(
+    message = Message.new(message_draft_attributes)
+    message.impression_ids = draft["impression_ids"]
+    message
+  end
+
+  def message_draft_attributes
+    {
       user_id: current_user&.id,
       recipient_id: draft["recipient_id"],
       occasion_id: draft["occasion_id"],
@@ -69,8 +75,6 @@ module MessageDraft
       episode: draft["episode"].presence,
       additional_message: draft["additional_message"].presence,
       recipient_name: draft["recipient_name"].presence
-    )
-    message.impression_ids = draft["impression_ids"]
-    message
+    }
   end
 end

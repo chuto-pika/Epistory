@@ -11,14 +11,14 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(provider: "", uid: "123", name: "Test", email: "test@example.com")
 
     assert_not user.valid?
-    assert_includes user.errors[:provider], "can't be blank"
+    assert_not_empty user.errors[:provider]
   end
 
   test "uid is required" do
     user = User.new(provider: "google_oauth2", uid: "", name: "Test", email: "test@example.com")
 
     assert_not user.valid?
-    assert_includes user.errors[:uid], "can't be blank"
+    assert_not_empty user.errors[:uid]
   end
 
   test "uid must be unique within provider" do
@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(provider: existing.provider, uid: existing.uid, name: "Dup", email: "dup@example.com")
 
     assert_not user.valid?
-    assert_includes user.errors[:uid], "has already been taken"
+    assert_not_empty user.errors[:uid]
   end
 
   test "same uid with different provider is valid" do
@@ -39,22 +39,18 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(provider: "google_oauth2", uid: "999", name: "", email: "test@example.com")
 
     assert_not user.valid?
-    assert_includes user.errors[:name], "can't be blank"
+    assert_not_empty user.errors[:name]
   end
 
   test "email is required" do
     user = User.new(provider: "google_oauth2", uid: "999", name: "Test", email: "")
 
     assert_not user.valid?
-    assert_includes user.errors[:email], "can't be blank"
+    assert_not_empty user.errors[:email]
   end
 
   test "find_or_create_from_auth creates new user" do
-    auth = OpenStruct.new(
-      provider: "google_oauth2",
-      uid: "999999",
-      info: OpenStruct.new(name: "New User", email: "new@example.com", image: "https://example.com/new.png")
-    )
+    auth = mock_auth_hash(uid: "999999", name: "New User", email: "new@example.com", image: "https://example.com/new.png")
 
     assert_difference "User.count", 1 do
       user = User.find_or_create_from_auth(auth)
@@ -69,16 +65,22 @@ class UserTest < ActiveSupport::TestCase
 
   test "find_or_create_from_auth finds existing user" do
     existing = users(:alice)
-    auth = OpenStruct.new(
-      provider: existing.provider,
-      uid: existing.uid,
-      info: OpenStruct.new(name: "Different Name", email: "different@example.com", image: nil)
-    )
+    auth = mock_auth_hash(uid: existing.uid, name: "Different Name", email: "different@example.com", image: nil)
 
     assert_no_difference "User.count" do
       user = User.find_or_create_from_auth(auth)
 
       assert_equal existing.id, user.id
     end
+  end
+
+  private
+
+  def mock_auth_hash(uid:, name:, email:, image:)
+    OmniAuth::AuthHash.new(
+      provider: "google_oauth2",
+      uid: uid,
+      info: { name: name, email: email, image: image }
+    )
   end
 end

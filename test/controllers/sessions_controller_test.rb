@@ -33,6 +33,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "create links existing message to user" do
     # 未ログインでメッセージ作成してセッションに保存
     message = create_message_via_steps
+
     assert_nil message.user_id
 
     # ログインすると紐付く
