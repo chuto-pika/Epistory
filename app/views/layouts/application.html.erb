@@ -45,9 +45,13 @@
     <div class="relative flex min-h-screen flex-col overflow-x-hidden">
       <%= render "shared/header" %>
 
-      <main class="flex-grow">
-        <%= yield %>
-      </main>
+      <div class="flex flex-grow">
+        <%= render "shared/sidebar" %>
+
+        <main class="flex-grow min-w-0">
+          <%= yield %>
+        </main>
+      </div>
 
       <%= render "shared/footer" %>
     </div>
