@@ -22,7 +22,12 @@
         <%= link_to "ログイン", login_path, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
       <% end %>
     </nav>
-    <div class="md:hidden">
+    <div class="md:hidden flex items-center gap-2">
+      <% if logged_in? %>
+        <button data-action="click->sidebar#toggle" class="p-1.5 rounded-lg hover:bg-primary/5 transition-colors" aria-label="メッセージ履歴">
+          <span class="material-symbols-outlined text-primary text-2xl">history</span>
+        </button>
+      <% end %>
       <span class="material-symbols-outlined text-main-text">menu</span>
     </div>
   </div>
