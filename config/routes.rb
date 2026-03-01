@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :messages, only: %i[show edit update] do
+  resources :messages, only: %i[show edit update destroy] do
     member do
       patch :restore
     end

@@ -1,8 +1,8 @@
 class MessagesController < ApplicationController
   include MessageDraft
 
-  before_action :set_message, only: %i[show edit update restore]
-  before_action :authorize_message!, only: %i[edit update restore]
+  before_action :set_message, only: %i[show edit update restore destroy]
+  before_action :authorize_message!, only: %i[edit update restore destroy]
 
   def show
     restore_draft_from_message(@message)
@@ -25,12 +25,17 @@ class MessagesController < ApplicationController
     redirect_to edit_message_path(@message)
   end
 
+  def destroy
+    @message.destroy
+    redirect_back(fallback_location: root_path)
+  end
+
   private
 
   def authorize_message!
     return if message_owner?
 
-    redirect_to root_path, alert: "このメッセージを編集する権限がありません"
+    redirect_to root_path, alert: "このメッセージを操作する権限がありません"
   end
 
   def message_owner?
