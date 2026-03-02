@@ -157,6 +157,87 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  # === survey ===
+  test "survey saves satisfaction_rating" do
+    message = create_message_via_steps
+
+    patch survey_message_path(message), params: { message: { satisfaction_rating: 4 } }
+
+    assert_equal 4, message.reload.satisfaction_rating
+  end
+
+  test "survey saves usage_purpose" do
+    message = create_message_via_steps
+
+    patch survey_message_path(message), params: { message: { satisfaction_rating: 5, usage_purpose: "send_as_is" } }
+
+    assert_equal 5, message.reload.satisfaction_rating
+    assert_equal "send_as_is", message.reload.usage_purpose
+  end
+
+  test "survey responds with turbo_stream" do
+    message = create_message_via_steps
+
+    patch survey_message_path(message), params: { message: { satisfaction_rating: 3 } },
+                                        headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_includes response.body, "survey_#{message.id}"
+    assert_includes response.body, "ご回答ありがとうございます"
+  end
+
+  test "survey does not overwrite answered survey" do
+    message = create_message_via_steps
+    message.update!(satisfaction_rating: 3, usage_purpose: "reference")
+
+    patch survey_message_path(message), params: { message: { satisfaction_rating: 5, usage_purpose: "send_as_is" } }
+
+    assert_equal 3, message.reload.satisfaction_rating
+    assert_equal "reference", message.reload.usage_purpose
+  end
+
+  test "survey is rejected for non-owner" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    reset!
+    sign_in_as(users(:bob))
+
+    patch survey_message_path(message), params: { message: { satisfaction_rating: 4 } }
+
+    assert_redirected_to root_path
+    assert_nil message.reload.satisfaction_rating
+  end
+
+  test "show displays survey for owner with unanswered survey" do
+    message = create_message_via_steps
+
+    get message_path(message)
+
+    assert_response :success
+    assert_select "[data-controller='survey']"
+  end
+
+  test "show does not display survey for non-owner" do
+    message = create_message_via_steps
+    reset!
+
+    get message_path(message)
+
+    assert_response :success
+    assert_select "[data-controller='survey']", count: 0
+  end
+
+  test "show does not display survey when already answered" do
+    message = create_message_via_steps
+    message.update!(satisfaction_rating: 4)
+
+    get message_path(message)
+
+    assert_response :success
+    assert_select "[data-controller='survey']", count: 0
+  end
+
   private
 
   def complete_all_steps
