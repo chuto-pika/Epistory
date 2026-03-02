@@ -31,6 +31,10 @@
       </button>
     </div>
 
+    <% if message_owner? && !@message.survey_answered? %>
+      <%= render "messages/survey", message: @message %>
+    <% end %>
+
     <div class="space-y-3">
       <%= link_to "新しいメッセージを作る", new_message_path, class: "block w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg text-center leading-[3.5rem] hover:bg-primary/5 transition-all" %>
       <%= link_to "トップに戻る", root_path, class: "block w-full h-12 text-sub-text rounded-xl font-medium text-center leading-[3rem] hover:text-primary transition-all" %>
