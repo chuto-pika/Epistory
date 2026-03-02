@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_28_100000) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_02_084033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_28_100000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "recipient_name"
+    t.integer "satisfaction_rating"
+    t.string "usage_purpose"
     t.index ["feeling_id"], name: "index_messages_on_feeling_id"
     t.index ["occasion_id"], name: "index_messages_on_occasion_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"

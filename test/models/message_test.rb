@@ -176,4 +176,110 @@ class MessageTest < ActiveSupport::TestCase
 
     assert_predicate message, :valid?
   end
+
+  # === satisfaction_rating ===
+  test "satisfaction_ratingが1〜5なら有効" do
+    (1..5).each do |rating|
+      message = Message.new(
+        recipient: @recipient,
+        occasion: @occasion,
+        feeling: @feeling,
+        satisfaction_rating: rating
+      )
+
+      assert_predicate message, :valid?, "rating #{rating} should be valid"
+    end
+  end
+
+  test "satisfaction_ratingが0なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      satisfaction_rating: 0
+    )
+
+    assert_not message.valid?
+  end
+
+  test "satisfaction_ratingが6なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      satisfaction_rating: 6
+    )
+
+    assert_not message.valid?
+  end
+
+  test "satisfaction_ratingがnilなら有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      satisfaction_rating: nil
+    )
+
+    assert_predicate message, :valid?
+  end
+
+  # === usage_purpose ===
+  test "usage_purposeが有効な値なら有効" do
+    Message::USAGE_PURPOSE_OPTIONS.each do |purpose|
+      message = Message.new(
+        recipient: @recipient,
+        occasion: @occasion,
+        feeling: @feeling,
+        usage_purpose: purpose
+      )
+
+      assert_predicate message, :valid?, "purpose #{purpose} should be valid"
+    end
+  end
+
+  test "usage_purposeが無効な値なら無効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      usage_purpose: "invalid_value"
+    )
+
+    assert_not message.valid?
+  end
+
+  test "usage_purposeがnilなら有効" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      usage_purpose: nil
+    )
+
+    assert_predicate message, :valid?
+  end
+
+  # === survey_answered? ===
+  test "survey_answered?はsatisfaction_ratingがあればtrueを返す" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      satisfaction_rating: 3
+    )
+
+    assert_predicate message, :survey_answered?
+  end
+
+  test "survey_answered?はsatisfaction_ratingがnilならfalseを返す" do
+    message = Message.new(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      satisfaction_rating: nil
+    )
+
+    assert_not_predicate message, :survey_answered?
+  end
 end

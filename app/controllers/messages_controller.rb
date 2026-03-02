@@ -1,8 +1,10 @@
 class MessagesController < ApplicationController
   include MessageDraft
 
-  before_action :set_message, only: %i[show edit update restore destroy]
-  before_action :authorize_message!, only: %i[edit update restore destroy]
+  before_action :set_message, only: %i[show edit update restore destroy survey]
+  before_action :authorize_message!, only: %i[edit update restore destroy survey]
+
+  helper_method :message_owner?
 
   def show
     restore_draft_from_message(@message)
@@ -30,6 +32,22 @@ class MessagesController < ApplicationController
     redirect_back_or_to root_path
   end
 
+  def survey
+    if @message.survey_answered?
+      redirect_to message_path(@message)
+      return
+    end
+
+    @message.update(survey_params)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("survey_#{@message.id}", partial: "messages/survey_thanks")
+      end
+      format.html { redirect_to message_path(@message) }
+    end
+  end
+
   private
 
   def authorize_message!
@@ -44,5 +62,9 @@ class MessagesController < ApplicationController
     else
       session[:created_message_id] == @message.id
     end
+  end
+
+  def survey_params
+    params.require(:message).permit(:satisfaction_rating, :usage_purpose)
   end
 end
