@@ -42,8 +42,10 @@
   </head>
 
   <body class="bg-background-light selection:bg-primary/20">
-    <div class="relative flex min-h-screen flex-col overflow-x-hidden">
+    <div class="relative flex min-h-screen flex-col overflow-x-hidden" <%= "data-controller=sidebar" if logged_in? %>>
       <%= render "shared/header" %>
+
+      <%= render "shared/sidebar" %>
 
       <main class="flex-grow">
         <%= yield %>

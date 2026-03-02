@@ -122,6 +122,41 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # === destroy ===
+  test "logged in user can delete own message" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    assert_difference("Message.count", -1) do
+      delete message_path(message)
+    end
+  end
+
+  test "logged in user cannot delete others message" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    reset!
+    sign_in_as(users(:bob))
+
+    assert_no_difference("Message.count") do
+      delete message_path(message)
+    end
+
+    assert_redirected_to root_path
+  end
+
+  test "guest cannot delete message without session" do
+    message = create_message_via_steps
+    reset!
+
+    assert_no_difference("Message.count") do
+      delete message_path(message)
+    end
+
+    assert_redirected_to root_path
+  end
+
   private
 
   def complete_all_steps

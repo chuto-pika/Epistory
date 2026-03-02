@@ -1,0 +1,75 @@
+<% if logged_in? %>
+  <%# オーバーレイ %>
+  <div data-sidebar-target="overlay"
+       data-action="click->sidebar#close"
+       class="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm hidden transition-opacity"></div>
+
+  <%# ドロワー本体 %>
+  <aside data-sidebar-target="drawer"
+         class="fixed top-0 left-0 z-50 h-full w-64 bg-white/95 backdrop-blur-md shadow-xl -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <%# ヘッダー %>
+    <div class="flex items-center justify-between px-4 py-3 border-b border-primary/10">
+      <h2 class="text-sm font-bold text-main-text flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">history</span>
+        履歴
+      </h2>
+      <button data-action="click->sidebar#close" class="p-1 rounded-full hover:bg-primary/5 text-sub-text transition-colors">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+    </div>
+
+    <%# メッセージ一覧 %>
+    <% if @sidebar_messages.present? %>
+      <nav class="flex-1 overflow-y-auto">
+        <ul>
+          <% @sidebar_messages.each do |message| %>
+            <li class="group relative border-b border-primary/5 last:border-b-0">
+              <%= link_to message_path(message), class: "flex items-center gap-3 px-4 py-3 hover:bg-primary/5 transition-colors" do %>
+                <span class="material-symbols-outlined text-primary/60 text-lg flex-shrink-0">mail</span>
+                <div class="min-w-0 flex-1">
+                  <span class="text-sm font-medium text-main-text block truncate"><%= message.recipient.name %></span>
+                  <span class="text-xs text-sub-text/50"><%= message.created_at.strftime("%Y/%-m/%-d") %></span>
+                </div>
+              <% end %>
+              <%= button_to message_path(message), method: :delete,
+                    class: "absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 rounded-full hover:bg-red-50 text-sub-text/30 hover:text-red-500 transition-all",
+                    data: { turbo_confirm: "このメッセージを削除しますか？" } do %>
+                <span class="material-symbols-outlined text-base">delete</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+
+      <% if @sidebar_messages.total_pages > 1 %>
+        <div class="px-4 py-2 border-t border-primary/10 flex items-center justify-center gap-2 text-xs">
+          <% if @sidebar_messages.prev_page %>
+            <%= link_to url_for(sidebar_page: @sidebar_messages.prev_page), class: "text-primary hover:bg-primary/5 rounded p-1 transition-colors" do %>
+              <span class="material-symbols-outlined text-base">chevron_left</span>
+            <% end %>
+          <% end %>
+          <span class="text-sub-text/60"><%= @sidebar_messages.current_page %> / <%= @sidebar_messages.total_pages %></span>
+          <% if @sidebar_messages.next_page %>
+            <%= link_to url_for(sidebar_page: @sidebar_messages.next_page), class: "text-primary hover:bg-primary/5 rounded p-1 transition-colors" do %>
+              <span class="material-symbols-outlined text-base">chevron_right</span>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <span class="material-symbols-outlined text-3xl text-sub-text/20 mb-2">mail</span>
+        <p class="text-xs text-sub-text/50 mb-3">まだメッセージがありません</p>
+        <%= link_to "メッセージを作る", new_message_path, class: "text-xs font-medium text-primary hover:underline" %>
+      </div>
+    <% end %>
+
+    <%# フッター: 新規作成ボタン %>
+    <div class="px-4 py-3 border-t border-primary/10">
+      <%= link_to new_message_path, class: "flex items-center gap-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg px-3 py-2 transition-colors" do %>
+        <span class="material-symbols-outlined text-lg">add</span>
+        新しいメッセージ
+      <% end %>
+    </div>
+  </aside>
+<% end %>

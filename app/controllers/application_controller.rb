@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user, :logged_in?
 
+  before_action :set_sidebar_messages
+
   private
 
   def current_user
@@ -15,5 +17,15 @@ class ApplicationController < ActionController::Base
     return if logged_in?
 
     redirect_to login_path, alert: "ログインしてください"
+  end
+
+  def set_sidebar_messages
+    return unless logged_in?
+
+    @sidebar_messages = current_user.messages
+                                    .includes(:recipient)
+                                    .order(created_at: :desc)
+                                    .page(params[:sidebar_page])
+                                    .per(10)
   end
 end
