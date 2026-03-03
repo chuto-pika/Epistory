@@ -25,6 +25,7 @@ gobject = ctypes.CDLL(ctypes.util.find_library('gobject-2.0'))
 
 # ===== Constants =====
 CAIRO_FORMAT_ARGB32 = 0
+CAIRO_FORMAT_RGB24 = 1
 PANGO_SCALE = 1024
 PANGO_WEIGHT_NORMAL = 400
 PANGO_WEIGHT_BOLD = 700
@@ -65,7 +66,7 @@ class Ctx:
 
     def __init__(self, w, h):
         self.w, self.h = w, h
-        self.surface = cairo.cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h)
+        self.surface = cairo.cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h)
         self.cr = cairo.cairo_create(self.surface)
 
     def save(self):
@@ -243,9 +244,9 @@ def gen_v1(logo_path, out):
 
     # Decorative soft circles
     soft_circles(c, [
-        (-60, -40, 180, 0.06),
-        (WIDTH + 80, HEIGHT + 60, 200, 0.05),
-        (WIDTH - 200, -80, 120, 0.03),
+        (-60, -40, 180, 0.15),
+        (WIDTH + 80, HEIGHT + 60, 200, 0.12),
+        (WIDTH - 200, -80, 120, 0.08),
     ])
 
     # Glass panel card
@@ -253,7 +254,7 @@ def gen_v1(logo_path, out):
     cx, cy = (WIDTH - cw) / 2, (HEIGHT - ch) / 2
 
     # Shadow
-    c.rgb((0, 0, 0), 0.04)
+    c.rgb((0, 0, 0), 0.10)
     c.rounded_rect(cx + 4, cy + 4, cw, ch, 24)
 
     # Card fill (semi-transparent white)
@@ -261,11 +262,11 @@ def gen_v1(logo_path, out):
     c.rounded_rect(cx, cy, cw, ch, 24)
 
     # Card border
-    c.rgb(COL['primary'], 0.12)
+    c.rgb(COL['primary'], 0.30)
     c.rounded_rect_stroke(cx, cy, cw, ch, 24, 1.5)
 
     # Ruled lines inside card
-    ruled_lines(c, cx + 40, cy + 20, cw - 80, ch - 40, sp=34, a=0.04)
+    ruled_lines(c, cx + 40, cy + 20, cw - 80, ch - 40, sp=34, a=0.10)
 
     # Logo
     logo_top = cy + 40
@@ -273,7 +274,7 @@ def gen_v1(logo_path, out):
 
     # Decorative line
     ly = logo_bottom + 24
-    deco_line(c, WIDTH/2, ly, 80, 2.0, 0.4)
+    deco_line(c, WIDTH/2, ly, 80, 2.0, 0.7)
 
     # Tagline
     ty = ly + 20
@@ -281,7 +282,7 @@ def gen_v1(logo_path, out):
     c.text_centered("言葉にできなかった想いを、かたちに", WIDTH/2, ty, size=20)
 
     # Sub text
-    c.rgb(COL['sub_text'], 0.7)
+    c.rgb(COL['sub_text'], 0.85)
     c.text_centered("質問に答えるだけで、大切な人への感謝のメッセージが完成", WIDTH/2, ty + 48, size=12)
 
     c.write(out)
@@ -295,18 +296,18 @@ def gen_v2(logo_path, out):
     bg_cream(c)
 
     # Warm overlay bands (top/bottom)
-    c.rgb(COL['bg_dark'], 0.3)
+    c.rgb(COL['bg_dark'], 0.5)
     c.rect(0, 0, WIDTH, 80)
-    c.rgb(COL['bg_dark'], 0.2)
+    c.rgb(COL['bg_dark'], 0.4)
     c.rect(0, HEIGHT - 80, WIDTH, 80)
 
     # Left margin line (letter feel)
-    c.rgb(COL['primary'], 0.15)
+    c.rgb(COL['primary'], 0.35)
     c.line(80, 40, 80, HEIGHT - 40, 2.0)
 
     # Corner decorations
     cn, cw_l, mg = 40, 2.0, 30
-    c.rgb(COL['primary'], 0.2)
+    c.rgb(COL['primary'], 0.45)
     for (ax, ay, dx, dy) in [
         (mg, mg, 1, 1), (WIDTH-mg, mg, -1, 1),
         (mg, HEIGHT-mg, 1, -1), (WIDTH-mg, HEIGHT-mg, -1, -1),
@@ -315,15 +316,15 @@ def gen_v2(logo_path, out):
         c.line(ax, ay, ax, ay + dy*cn, cw_l)
 
     # Faint ruled lines
-    ruled_lines(c, 100, 60, WIDTH - 200, HEIGHT - 120, sp=36, a=0.03)
+    ruled_lines(c, 100, 60, WIDTH - 200, HEIGHT - 120, sp=36, a=0.08)
 
     # Logo
     logo_bottom, _ = draw_logo_or_fallback(c, logo_path, WIDTH/2, 100, 240)
 
     # Decorative line with dots
     ly = logo_bottom + 30
-    deco_line(c, WIDTH/2, ly, 100, 2.0, 0.3)
-    c.rgb(COL['primary'], 0.3)
+    deco_line(c, WIDTH/2, ly, 100, 2.0, 0.6)
+    c.rgb(COL['primary'], 0.6)
     c.circle(WIDTH/2 - 58, ly, 3)
     c.circle(WIDTH/2 + 58, ly, 3)
 
@@ -333,7 +334,7 @@ def gen_v2(logo_path, out):
     c.text_centered("言葉にできなかった想いを、かたちに", WIDTH/2, ty, size=22, bold=True)
 
     # Sub text
-    c.rgb(COL['sub_text'], 0.6)
+    c.rgb(COL['sub_text'], 0.8)
     c.text_centered("質問に答えるだけで、大切な人への感謝のメッセージが完成", WIDTH/2, ty + 52, size=13)
 
     c.write(out)
@@ -347,15 +348,15 @@ def gen_v3(logo_path, out):
     bg_cream(c)
 
     # Large accent circle (right side, clipped)
-    c.rgb(COL['primary'], 0.06)
+    c.rgb(COL['primary'], 0.15)
     c.circle(WIDTH + 40, HEIGHT/2 + 40, 340)
 
     # Small accent circle
-    c.rgb(COL['primary'], 0.04)
+    c.rgb(COL['primary'], 0.10)
     c.circle(WIDTH - 200, 80, 80)
 
     # Tiny dot
-    c.rgb(COL['primary'], 0.15)
+    c.rgb(COL['primary'], 0.30)
     c.circle(120, HEIGHT - 100, 8)
 
     # Logo (slightly left of center)
@@ -365,7 +366,7 @@ def gen_v3(logo_path, out):
 
     # Decorative line
     ly = logo_bottom + 24
-    deco_line(c, content_cx, ly, 60, 2.5, 0.35)
+    deco_line(c, content_cx, ly, 60, 2.5, 0.65)
 
     # Tagline
     ty = ly + 22
@@ -373,7 +374,7 @@ def gen_v3(logo_path, out):
     c.text_centered("言葉にできなかった想いを、かたちに", content_cx, ty, size=20)
 
     # Sub text
-    c.rgb(COL['sub_text'], 0.6)
+    c.rgb(COL['sub_text'], 0.8)
     c.text_centered("質問に答えるだけで、大切な人への感謝のメッセージが完成", content_cx, ty + 44, size=12)
 
     c.write(out)
@@ -383,7 +384,7 @@ def gen_v3(logo_path, out):
 
 def find_logo():
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    for name in ["logo_transparent.png", "logo.png"]:
+    for name in ["logo.png", "logo_transparent.png"]:
         p = os.path.join(base, "app", "assets", "images", name)
         if os.path.exists(p):
             return p
