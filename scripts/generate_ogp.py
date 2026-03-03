@@ -203,11 +203,11 @@ def soft_circles(c, items):
         c.circle(cx, cy, r)
 
 
-def ruled_lines(c, x, y, w, h, sp=32, a=0.06):
+def ruled_lines(c, x, y, w, h, sp=32, a=0.06, lw=1.0):
     c.rgb(COL['primary'], a)
     cur = y + sp
     while cur < y + h:
-        c.line(x, cur, x + w, cur, 0.8)
+        c.line(x, cur, x + w, cur, lw)
         cur += sp
 
 
@@ -266,7 +266,7 @@ def gen_v1(logo_path, out):
     c.rounded_rect_stroke(cx, cy, cw, ch, 24, 1.5)
 
     # Ruled lines inside card
-    ruled_lines(c, cx + 40, cy + 20, cw - 80, ch - 40, sp=34, a=0.10)
+    ruled_lines(c, cx + 40, cy + 20, cw - 80, ch - 40, sp=34, a=0.22, lw=1.0)
 
     # Logo
     logo_top = cy + 40
@@ -315,8 +315,8 @@ def gen_v2(logo_path, out):
         c.line(ax, ay, ax + dx*cn, ay, cw_l)
         c.line(ax, ay, ax, ay + dy*cn, cw_l)
 
-    # Faint ruled lines
-    ruled_lines(c, 100, 60, WIDTH - 200, HEIGHT - 120, sp=36, a=0.08)
+    # Ruled lines (letter paper feel)
+    ruled_lines(c, 100, 60, WIDTH - 200, HEIGHT - 120, sp=36, a=0.18, lw=1.0)
 
     # Logo
     logo_bottom, _ = draw_logo_or_fallback(c, logo_path, WIDTH/2, 100, 240)
@@ -395,8 +395,9 @@ def main():
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     img_dir = os.path.join(base, "app", "assets", "images")
 
-    logo = find_logo()
-    print(f"Logo: {logo or '(not found - using text fallback)'}")
+    # ロゴ画像を使わずテキスト表示にする（ロゴ版は *_logo.png として保存済み）
+    logo = None
+    print("Using text mode (no logo image)")
     print("Generating OGP variations...")
 
     gen_v1(logo, os.path.join(img_dir, "ogp_v1.png"))
