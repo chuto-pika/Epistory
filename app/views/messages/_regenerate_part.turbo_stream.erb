@@ -1,0 +1,8 @@
+<%= turbo_stream.replace "message_part_#{part}" do %>
+  <%= render "messages/message_part", part_name: part, content: message.generated_parts[part], message: message %>
+<% end %>
+
+<%= turbo_stream.replace "edit_textarea" do %>
+  <textarea id="edit_textarea" name="message[edited_content]" rows="12"
+            class="w-full p-6 rounded-2xl border-2 border-primary/10 bg-white/80 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none leading-relaxed"><%= message.generated_content %></textarea>
+<% end %>

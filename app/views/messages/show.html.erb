@@ -15,7 +15,7 @@
     <%# 手紙風メッセージ表示 %>
     <div class="relative p-8 lg:p-10 rounded-2xl bg-white/80 border border-primary/10 shadow-sm mb-6"
          style="background-image: repeating-linear-gradient(transparent, transparent 2.2rem, rgba(192,108,94,0.08) 2.2rem, rgba(192,108,94,0.08) calc(2.2rem + 1px)); background-position: 0 1.4rem;">
-      <p data-clipboard-target="source" class="text-main-text whitespace-pre-line leading-[2.2rem]"><%= @message.edited_content.presence || @message.generated_content %></p>
+      <p data-clipboard-target="source" class="text-main-text whitespace-pre-line leading-[2.2rem]"><%= @message.display_content %></p>
     </div>
 
     <%# アクションボタン %>
