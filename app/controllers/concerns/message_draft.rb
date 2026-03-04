@@ -30,7 +30,7 @@ module MessageDraft
 
     message = build_message_from_draft
     if message.save
-      message.update(generated_content: MessageGenerator.new(message).generate)
+      generate_and_save_content(message)
       session.delete(:message_draft)
       session[:created_message_id] = message.id unless logged_in?
       redirect_to message_path(message)
@@ -64,6 +64,11 @@ module MessageDraft
     message = Message.new(message_draft_attributes)
     message.impression_ids = draft["impression_ids"]
     message
+  end
+
+  def generate_and_save_content(message)
+    parts = MessageGenerator.new(message).generate_parts
+    message.update(generated_parts: parts, generated_content: MessageGenerator.join_parts(parts))
   end
 
   def message_draft_attributes
