@@ -1,4 +1,6 @@
 class MessageGenerator # rubocop:disable Metrics/ClassLength
+  REGENERABLE_PARTS = %w[opening impression episode closing].freeze
+
   HONORIFICS = {
     "親" => "お父さん・お母さん",
     "パートナー" => "あなた",
@@ -118,18 +120,33 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
   end
 
   def generate
-    parts = []
-    parts << opening
-    parts << impression_section
-    parts << episode_section
-    parts << closing
-    parts << "P.S. #{@additional_message}" if @additional_message.present?
-    parts.compact.join("\n\n")
+    self.class.join_parts(generate_parts)
   end
 
-  private
+  def generate_parts
+    parts = {}
+    parts["opening"] = generate_opening
+    parts["impression"] = generate_impression
+    parts["episode"] = generate_episode
+    parts["closing"] = generate_closing
+    parts["ps"] = generate_ps
+    parts.compact
+  end
 
-  def opening
+  def generate_part(part_name)
+    unless REGENERABLE_PARTS.include?(part_name)
+      raise ArgumentError, "Invalid part name: #{part_name}. Must be one of #{REGENERABLE_PARTS.join(", ")}"
+    end
+
+    send(:"generate_#{part_name}")
+  end
+
+  def self.join_parts(parts)
+    ordered = %w[opening impression episode closing ps]
+    ordered.filter_map { |key| parts[key] }.join("\n\n")
+  end
+
+  def generate_opening
     prefix = if @message.recipient_name.present?
                "#{@message.recipient_name}へ\n\n"
              else
@@ -145,13 +162,13 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
     "#{prefix}#{body}"
   end
 
-  def impression_section
+  def generate_impression
     return nil if @impressions.empty?
 
     @impressions.map { |imp| IMPRESSION_TEMPLATES.fetch(imp.name, ["#{imp.name}。"]).sample }.join
   end
 
-  def episode_section
+  def generate_episode
     return nil if @episode.blank?
 
     intro = EPISODE_INTROS.sample
@@ -159,12 +176,18 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
     "#{intro}#{@episode}\n#{outro}"
   end
 
-  def closing
+  def generate_closing
     templates = FEELING_TEMPLATES[@feeling.name]
     if templates
       templates.sample
     else
       "ありがとう。"
     end
+  end
+
+  def generate_ps
+    return nil if @additional_message.blank?
+
+    "P.S. #{@additional_message}"
   end
 end

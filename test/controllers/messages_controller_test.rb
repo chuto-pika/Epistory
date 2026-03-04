@@ -157,6 +157,168 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  # === regenerate ===
+  test "regenerate updates generated_content" do
+    message = create_message_via_steps
+    original_content = message.generated_content
+
+    patch regenerate_message_path(message)
+    message.reload
+
+    assert_not_equal original_content, message.generated_content
+  end
+
+  test "regenerate resets edited_content to nil" do
+    message = create_message_via_steps
+    message.update!(edited_content: "ユーザー編集済み")
+
+    patch regenerate_message_path(message)
+
+    assert_nil message.reload.edited_content
+  end
+
+  test "regenerate redirects to show" do
+    message = create_message_via_steps
+
+    patch regenerate_message_path(message)
+
+    assert_redirected_to message_path(message)
+  end
+
+  test "logged in user cannot regenerate others message" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+    original_content = message.generated_content
+
+    reset!
+    sign_in_as(users(:bob))
+
+    patch regenerate_message_path(message)
+
+    assert_redirected_to root_path
+    assert_equal original_content, message.reload.generated_content
+  end
+
+  test "guest cannot regenerate message without session" do
+    message = create_message_via_steps
+    original_content = message.generated_content
+    reset!
+
+    patch regenerate_message_path(message)
+
+    assert_redirected_to root_path
+    assert_equal original_content, message.reload.generated_content
+  end
+
+  test "regenerate sets generated_parts" do
+    message = create_message_via_steps
+
+    patch regenerate_message_path(message)
+    message.reload
+
+    assert_predicate message, :parts_available?
+    assert_includes message.generated_parts.keys, "opening"
+    assert_includes message.generated_parts.keys, "closing"
+  end
+
+  # === regenerate_part ===
+  test "regenerate_part updates only the specified part" do
+    message = create_message_via_steps
+    # regenerateで generated_parts を付与
+    patch regenerate_message_path(message)
+    message.reload
+
+    original_opening = message.generated_parts["opening"]
+
+    patch regenerate_part_message_path(message), params: { part: "closing" }
+    message.reload
+
+    # openingは変わらない
+    assert_equal original_opening, message.generated_parts["opening"]
+    # closingは変わりうる（テンプレートが複数あるため）
+    assert_predicate message.generated_parts["closing"], :present?
+    # generated_contentが再構築される
+    assert_predicate message.generated_content, :present?
+  end
+
+  test "regenerate_part rejects invalid part name" do
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+
+    patch regenerate_part_message_path(message), params: { part: "invalid" }
+
+    assert_redirected_to message_path(message)
+    assert_equal "無効なパートです", flash[:alert]
+  end
+
+  test "regenerate_part rejects ps part" do
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+
+    patch regenerate_part_message_path(message), params: { part: "ps" }
+
+    assert_redirected_to message_path(message)
+    assert_equal "無効なパートです", flash[:alert]
+  end
+
+  test "regenerate_part clears edited_content" do
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+    message.update!(edited_content: "編集済み")
+
+    patch regenerate_part_message_path(message), params: { part: "opening" }
+    message.reload
+
+    assert_nil message.edited_content
+    assert_predicate message.generated_parts["opening"], :present?
+  end
+
+  test "regenerate_part rejects legacy message without generated_parts" do
+    message = create_message_via_steps
+    # generated_partsがnilの状態（レガシー）
+    message.update!(generated_parts: nil)
+
+    patch regenerate_part_message_path(message), params: { part: "opening" }
+
+    assert_redirected_to message_path(message)
+    assert_equal "パート別再生成に対応していないメッセージです", flash[:alert]
+  end
+
+  test "regenerate_part responds with turbo_stream" do
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+
+    patch regenerate_part_message_path(message),
+          params: { part: "opening" },
+          headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_includes response.body, "message_part_opening"
+  end
+
+  test "logged in user cannot regenerate_part others message" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+
+    reset!
+    sign_in_as(users(:bob))
+
+    patch regenerate_part_message_path(message), params: { part: "opening" }
+
+    assert_redirected_to root_path
+  end
+
+  test "guest cannot regenerate_part without session" do
+    message = create_message_via_steps
+    patch regenerate_message_path(message)
+    reset!
+
+    patch regenerate_part_message_path(message), params: { part: "opening" }
+
+    assert_redirected_to root_path
+  end
+
   # === survey ===
   test "survey saves satisfaction_rating" do
     message = create_message_via_steps

@@ -1,0 +1,15 @@
+<div id="message_part_<%= part_name %>" class="flex items-start gap-2">
+  <% if MessageGenerator::REGENERABLE_PARTS.include?(part_name) %>
+    <%= button_to regenerate_part_message_path(message),
+          method: :patch,
+          params: { part: part_name },
+          class: "shrink-0 mt-1 text-primary/40 hover:text-primary transition-colors",
+          form: { data: { turbo_stream: "" }, class: "shrink-0" },
+          aria: { label: "#{part_name}を再生成" } do %>
+      <span class="material-symbols-outlined" style="font-size:18px">refresh</span>
+    <% end %>
+  <% else %>
+    <span class="shrink-0 mt-1 inline-block" style="width:18px"></span>
+  <% end %>
+  <span class="whitespace-pre-line"><%= content %></span>
+</div>

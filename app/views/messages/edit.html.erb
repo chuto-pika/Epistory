@@ -5,9 +5,25 @@
       <p class="text-sub-text font-light">自由に書き換えて、あなたらしい言葉にしてください。</p>
     </div>
 
+    <% if @message.parts_available? %>
+      <%# パート別表示（再生成アイコン付き） %>
+      <div class="p-6 rounded-2xl border-2 border-primary/10 bg-white/80 mb-4 space-y-4 leading-relaxed">
+        <% %w[opening impression episode closing ps].each do |part_name| %>
+          <% next unless @message.generated_parts[part_name].present? %>
+          <%= render "messages/message_part", part_name: part_name, content: @message.generated_parts[part_name], message: @message %>
+        <% end %>
+      </div>
+
+      <p class="text-sm text-sub-text/60 mb-6">
+        <span class="material-symbols-outlined align-middle" style="font-size:14px">refresh</span>
+        アイコンをクリックすると、そのパートだけ再生成できます。
+      </p>
+    <% end %>
+
     <%= form_with model: @message, url: message_path(@message), method: :patch, class: "space-y-6" do |f| %>
       <div>
         <%= f.text_area :edited_content,
+              id: "edit_textarea",
               value: @message.edited_content.presence || @message.generated_content,
               rows: 12,
               class: "w-full p-6 rounded-2xl border-2 border-primary/10 bg-white/80 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none leading-relaxed" %>
