@@ -20,4 +20,12 @@ class Message < ApplicationRecord
   def survey_answered?
     satisfaction_rating.present?
   end
+
+  def parts_available?
+    generated_parts.present?
+  end
+
+  def display_content
+    edited_content.presence || generated_content
+  end
 end
