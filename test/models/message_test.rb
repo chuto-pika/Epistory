@@ -282,4 +282,75 @@ class MessageTest < ActiveSupport::TestCase
 
     assert_not_predicate message, :survey_answered?
   end
+
+  # === parts_available? ===
+  test "parts_available?はgenerated_partsがある場合trueを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      generated_parts: { "opening" => "テスト" }
+    )
+
+    assert_predicate message, :parts_available?
+  end
+
+  test "parts_available?はgenerated_partsがnilの場合falseを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      generated_parts: nil
+    )
+
+    assert_not message.parts_available?
+  end
+
+  test "parts_available?はgenerated_partsが空ハッシュの場合falseを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      generated_parts: {}
+    )
+
+    assert_not message.parts_available?
+  end
+
+  # === display_content ===
+  test "display_contentはedited_contentがある場合それを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      edited_content: "編集済み",
+      generated_content: "自動生成"
+    )
+
+    assert_equal "編集済み", message.display_content
+  end
+
+  test "display_contentはedited_contentがない場合generated_contentを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      edited_content: nil,
+      generated_content: "自動生成"
+    )
+
+    assert_equal "自動生成", message.display_content
+  end
+
+  test "display_contentはedited_contentが空文字の場合generated_contentを返す" do
+    message = Message.create!(
+      recipient: @recipient,
+      occasion: @occasion,
+      feeling: @feeling,
+      edited_content: "",
+      generated_content: "自動生成"
+    )
+
+    assert_equal "自動生成", message.display_content
+  end
 end

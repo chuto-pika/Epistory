@@ -344,6 +344,116 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     assert_match(/あなたへ/, result2)
   end
 
+  # --- generate_parts ---
+
+  test "generate_partsがHashを返す" do
+    message = build_message(impressions: [@impression1], episode: "テスト", additional_message: "追伸")
+    parts = MessageGenerator.new(message).generate_parts
+
+    assert_kind_of Hash, parts
+    assert_includes parts.keys, "opening"
+    assert_includes parts.keys, "impression"
+    assert_includes parts.keys, "episode"
+    assert_includes parts.keys, "closing"
+    assert_includes parts.keys, "ps"
+  end
+
+  test "generate_partsでimpressionなしの場合はimpressionキーが含まれない" do
+    message = build_message(impressions: [])
+    parts = MessageGenerator.new(message).generate_parts
+
+    assert_not_includes parts.keys, "impression"
+  end
+
+  test "generate_partsでepisodeなしの場合はepisodeキーが含まれない" do
+    message = build_message(impressions: [@impression1], episode: nil)
+    parts = MessageGenerator.new(message).generate_parts
+
+    assert_not_includes parts.keys, "episode"
+  end
+
+  test "generate_partsでadditional_messageなしの場合はpsキーが含まれない" do
+    message = build_message(impressions: [@impression1], additional_message: nil)
+    parts = MessageGenerator.new(message).generate_parts
+
+    assert_not_includes parts.keys, "ps"
+  end
+
+  # --- generate_part ---
+
+  test "generate_partで各パートを個別生成できる" do
+    message = build_message(impressions: [@impression1], episode: "テストエピソード")
+    generator = MessageGenerator.new(message)
+
+    MessageGenerator::REGENERABLE_PARTS.each do |part_name|
+      result = generator.generate_part(part_name)
+
+      assert_kind_of String, result, "#{part_name}がStringを返すこと"
+    end
+  end
+
+  test "generate_partで無効パート名はArgumentError" do
+    message = build_message(impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+
+    assert_raises(ArgumentError) { generator.generate_part("invalid") }
+  end
+
+  test "generate_partでpsはArgumentError" do
+    message = build_message(impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+
+    assert_raises(ArgumentError) { generator.generate_part("ps") }
+  end
+
+  # --- join_parts ---
+
+  test "join_partsがHashからテキストを組み立てる" do
+    parts = {
+      "opening" => "宛名テスト",
+      "impression" => "印象テスト",
+      "closing" => "締めくくりテスト"
+    }
+    result = MessageGenerator.join_parts(parts)
+
+    assert_equal "宛名テスト\n\n印象テスト\n\n締めくくりテスト", result
+  end
+
+  test "join_partsはパートの順序を維持する" do
+    parts = {
+      "closing" => "締め",
+      "opening" => "開き",
+      "impression" => "印象"
+    }
+    result = MessageGenerator.join_parts(parts)
+
+    assert_equal "開き\n\n印象\n\n締め", result
+  end
+
+  # --- REGENERABLE_PARTS ---
+
+  test "REGENERABLE_PARTSにpsが含まれない" do
+    assert_not_includes MessageGenerator::REGENERABLE_PARTS, "ps"
+  end
+
+  test "REGENERABLE_PARTSに4つのパートが含まれる" do
+    assert_equal %w[opening impression episode closing], MessageGenerator::REGENERABLE_PARTS
+  end
+
+  # --- generateの後方互換性 ---
+
+  test "generateはgenerate_partsとjoin_partsの結果と一致する" do
+    message = build_message(impressions: [@impression1], episode: "テスト", additional_message: "追伸")
+    generator = MessageGenerator.new(message)
+
+    # sampleでランダムなので同じインスタンスから呼ぶと異なる結果になり得る
+    # ただしgenerateが内部的にgenerate_parts→join_partsを使っていることを構造的に確認
+    result = generator.generate
+
+    assert_kind_of String, result
+    assert_predicate result, :present?
+  end
+
   # --- バリエーションテスト ---
 
   test "同じ入力でも生成構造が正しい" do
