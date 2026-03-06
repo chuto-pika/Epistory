@@ -33,4 +33,57 @@
   .hero-gradient {
     background: radial-gradient(circle at center, rgba(192, 108, 94, 0.05) 0%, transparent 70%);
   }
+
+  /* LP: スクロールリビール */
+  .lp-reveal-hidden {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .lp-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* LP: フロートアニメーション（装飾要素） */
+  .lp-float {
+    animation: lp-float 6s ease-in-out infinite;
+  }
+
+  .lp-float-delayed {
+    animation: lp-float 7s ease-in-out 1s infinite;
+  }
+
+  .lp-float-slow {
+    animation: lp-float 8s ease-in-out 2s infinite;
+  }
+
+  /* LP: 手書き風アクセント下線 */
+  .lp-handwritten-accent {
+    background-image: url("data:image/svg+xml,%3Csvg width='120' height='8' viewBox='0 0 120 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 5C20 2 40 7 60 4C80 1 100 6 118 3' stroke='%23c9a96e' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: 120px 8px;
+    padding-bottom: 6px;
+  }
+
+  /* LP: CTAパルスエフェクト */
+  .lp-cta-pulse {
+    animation: lp-pulse 2.5s ease-in-out infinite;
+  }
+
+  .lp-cta-pulse:hover {
+    animation: none;
+  }
+}
+
+@keyframes lp-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+@keyframes lp-pulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(176, 125, 106, 0.3); }
+  50% { box-shadow: 0 4px 24px rgba(176, 125, 106, 0.5); }
 }
