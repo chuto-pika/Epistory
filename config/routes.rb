@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback", to: "sessions#create"
   post "/auth/:provider/callback", to: "sessions#create"
   get "/auth/failure", to: "sessions#failure"
+  get "/lp", to: "pages#landing", as: :landing
   get "/terms", to: "pages#terms"
   get "/privacy", to: "pages#privacy"
 
