@@ -1,0 +1,201 @@
+<%# ============================================
+    セクション1: ヒーロー
+    ============================================ %>
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
+         style="background:
+           radial-gradient(ellipse at 20% 50%, rgba(201, 169, 110, 0.08) 0%, transparent 50%),
+           radial-gradient(ellipse at 80% 20%, rgba(176, 125, 106, 0.06) 0%, transparent 50%),
+           radial-gradient(ellipse at 50% 80%, rgba(125, 154, 133, 0.05) 0%, transparent 50%),
+           #faf6f0;">
+  <%# 紙テクスチャ風のノイズオーバーレイ %>
+  <div class="pointer-events-none absolute inset-0 opacity-[0.03]"
+       style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E');"></div>
+
+  <%# 装飾：浮遊する封筒・ペン %>
+  <div class="pointer-events-none absolute top-[15%] left-[8%] text-4xl opacity-20 lp-float" aria-hidden="true">&#9993;</div>
+  <div class="pointer-events-none absolute top-[25%] right-[12%] text-3xl opacity-15 lp-float-delayed" aria-hidden="true">&#9998;</div>
+  <div class="pointer-events-none absolute bottom-[20%] left-[15%] text-2xl opacity-10 lp-float-slow" aria-hidden="true">&#10084;</div>
+
+  <div class="relative mx-auto max-w-3xl px-4 text-center" data-controller="scroll-reveal">
+    <p class="mb-4 text-sm tracking-widest text-[#6b5e52]" style="font-family: 'Zen Maru Gothic', sans-serif;"
+       data-scroll-reveal-target="item">
+      気持ちを言葉にする、お手伝い
+    </p>
+
+    <h1 class="mb-6 text-3xl leading-relaxed sm:text-4xl md:text-5xl md:leading-relaxed"
+        style="font-family: 'Klee One', cursive;"
+        data-scroll-reveal-target="item">
+      <span class="lp-text-reveal">&ldquo;</span><span class="lp-text-reveal lp-handwritten-accent" style="color: #c9a96e;">ありがとう</span><span class="lp-text-reveal">&rdquo;を、</span><br class="hidden sm:inline">
+      <span class="lp-text-reveal">あなたらしい言葉で。</span>
+    </h1>
+
+    <p class="mb-10 text-base leading-relaxed text-[#6b5e52] sm:text-lg"
+       style="font-family: 'Zen Maru Gothic', sans-serif;"
+       data-scroll-reveal-target="item">
+      質問に答えていくだけで、大切な人への<br class="sm:hidden">
+      感謝のメッセージが完成します。
+    </p>
+
+    <div data-scroll-reveal-target="item">
+      <a href="<%= step1_message_path %>"
+         class="lp-cta-button group inline-flex items-center gap-2 rounded-full bg-[#b07d6a] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all hover:bg-[#966552] hover:shadow-xl hover:-translate-y-0.5">
+        メッセージを作ってみる
+        <span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+      </a>
+
+      <p class="mt-4 text-xs text-[#6b5e52]">無料・登録なしで始められます</p>
+    </div>
+  </div>
+
+  <%# 波線セパレーター %>
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full" preserveAspectRatio="none">
+      <path d="M0 60V30C240 10 480 50 720 30C960 10 1200 50 1440 30V60H0Z" fill="#f0ebe2"/>
+    </svg>
+  </div>
+</section>
+
+<%# ============================================
+    セクション2: 使い方（3ステップ）
+    ============================================ %>
+<section class="bg-[#f0ebe2] py-20 sm:py-28" data-controller="scroll-reveal">
+  <div class="mx-auto max-w-4xl px-4">
+    <div class="mb-14 text-center" data-scroll-reveal-target="item">
+      <p class="mb-2 text-sm tracking-widest text-[#c9a96e]" style="font-family: 'Yomogi', cursive;">How it works</p>
+      <h2 class="text-2xl sm:text-3xl" style="font-family: 'Klee One', cursive;">
+        かんたん3ステップ
+      </h2>
+    </div>
+
+    <div class="grid gap-8 sm:grid-cols-3">
+      <%# ステップ1 %>
+      <div class="relative rounded-2xl bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item"
+           style="background-image: repeating-linear-gradient(transparent, transparent 27px, rgba(176,125,106,0.08) 27px, rgba(176,125,106,0.08) 28px); background-position: 0 20px;">
+        <div class="mb-4">
+          <span class="text-3xl font-semibold text-[#c9a96e]" style="font-family: 'Yomogi', cursive;">01</span>
+        </div>
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">相手と場面を選ぶ</h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          メッセージを贈りたい相手と、<br>きっかけを選択します。
+        </p>
+      </div>
+
+      <%# ステップ2 %>
+      <div class="relative rounded-2xl bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item"
+           style="background-image: repeating-linear-gradient(transparent, transparent 27px, rgba(176,125,106,0.08) 27px, rgba(176,125,106,0.08) 28px); background-position: 0 20px;">
+        <div class="mb-4">
+          <span class="text-3xl font-semibold text-[#c9a96e]" style="font-family: 'Yomogi', cursive;">02</span>
+        </div>
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">質問に答える</h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          相手の印象やエピソード、<br>伝えたい気持ちに答えます。
+        </p>
+      </div>
+
+      <%# ステップ3 %>
+      <div class="relative rounded-2xl bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item"
+           style="background-image: repeating-linear-gradient(transparent, transparent 27px, rgba(176,125,106,0.08) 27px, rgba(176,125,106,0.08) 28px); background-position: 0 20px;">
+        <div class="mb-4">
+          <span class="text-3xl font-semibold text-[#c9a96e]" style="font-family: 'Yomogi', cursive;">03</span>
+        </div>
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">メッセージが完成！</h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          あなたの気持ちが込もった<br>メッセージが自動で生成されます。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ============================================
+    セクション3: 特徴
+    ============================================ %>
+<section class="bg-[#faf6f0] py-20 sm:py-28" data-controller="scroll-reveal">
+  <div class="mx-auto max-w-3xl px-4">
+    <div class="mb-14 text-center" data-scroll-reveal-target="item">
+      <p class="mb-2 text-sm tracking-widest text-[#c9a96e]" style="font-family: 'Yomogi', cursive;">Features</p>
+      <h2 class="text-2xl sm:text-3xl" style="font-family: 'Klee One', cursive;">
+        Epistoryの特徴
+      </h2>
+    </div>
+
+    <div class="space-y-6">
+      <div class="rounded-xl border-l-4 border-[#7d9a85] bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item">
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">
+          <span class="mr-2 text-[#7d9a85]">&#9998;</span>
+          気持ちを整理するお手伝い
+        </h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          質問に答えていくことで、自分でも気づいていなかった感謝の気持ちが自然と言葉になっていきます。
+        </p>
+      </div>
+
+      <div class="rounded-xl border-l-4 border-[#7d9a85] bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item">
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">
+          <span class="mr-2 text-[#7d9a85]">&#10084;</span>
+          テンプレートではない、あなたの言葉
+        </h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          あなたの回答をもとにメッセージを組み立てるので、どこかで見たような定型文にはなりません。
+        </p>
+      </div>
+
+      <div class="rounded-xl border-l-4 border-[#7d9a85] bg-[#fffdf8] p-6 shadow-sm transition hover:shadow-md"
+           data-scroll-reveal-target="item">
+        <h3 class="mb-2 text-lg font-medium" style="font-family: 'Klee One', cursive;">
+          <span class="mr-2 text-[#7d9a85]">&#9993;</span>
+          無料・登録不要
+        </h3>
+        <p class="text-sm leading-relaxed text-[#6b5e52]">
+          アカウント登録なしで、すぐにメッセージを作り始められます。思い立ったその瞬間に。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ============================================
+    セクション4: CTA
+    ============================================ %>
+<section class="bg-[#f0ebe2] py-20 sm:py-28" data-controller="scroll-reveal">
+  <div class="mx-auto max-w-2xl px-4 text-center">
+    <%# 封筒風カード %>
+    <div class="relative mx-auto rounded-2xl bg-[#fffdf8] px-8 py-12 shadow-md sm:px-12"
+         data-scroll-reveal-target="item">
+      <%# 封筒フラップ装飾 %>
+      <div class="absolute -top-px left-0 right-0 overflow-hidden rounded-t-2xl">
+        <svg viewBox="0 0 400 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full" preserveAspectRatio="none">
+          <path d="M0 0L200 35L400 0V4L200 39L0 4Z" fill="rgba(176,125,106,0.1)"/>
+        </svg>
+      </div>
+
+      <%# ワックスシール風装飾 %>
+      <div class="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-[#8b5e3c] shadow-[0_2px_8px_rgba(139,94,60,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)]"
+           aria-hidden="true">
+        <span class="material-symbols-outlined text-3xl text-[#f0ebe2]" style="font-variation-settings: 'FILL' 1;">mail</span>
+      </div>
+
+      <h2 class="mb-4 text-2xl sm:text-3xl" style="font-family: 'Klee One', cursive;">
+        大切な人に、<br>想いを届けませんか？
+      </h2>
+
+      <p class="mb-8 text-sm leading-relaxed text-[#6b5e52]">
+        伝えたい気持ちがあるなら、今がそのときです。<br>
+        Epistoryが、あなたの想いを言葉にするお手伝いをします。
+      </p>
+
+      <a href="<%= step1_message_path %>"
+         class="lp-cta-button lp-cta-pulse group inline-flex items-center gap-2 rounded-full bg-[#b07d6a] px-10 py-4 text-lg font-medium text-white shadow-lg transition-all hover:bg-[#966552] hover:shadow-xl hover:-translate-y-0.5">
+        メッセージを作ってみる
+        <span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+      </a>
+
+      <p class="mt-4 text-xs text-[#6b5e52]">無料・登録なし・3分で完成</p>
+    </div>
+  </div>
+</section>
