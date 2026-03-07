@@ -1,8 +1,8 @@
-class MessagesController < ApplicationController
+class MessagesController < ApplicationController # rubocop:disable Metrics/ClassLength
   include MessageDraft
 
-  before_action :set_message, only: %i[show edit update restore regenerate regenerate_part destroy survey]
-  before_action :authorize_message!, only: %i[edit update restore regenerate regenerate_part destroy survey]
+  before_action :set_message, only: %i[show edit update restore regenerate regenerate_part destroy survey ai_refine]
+  before_action :authorize_message!, only: %i[edit update restore regenerate regenerate_part destroy survey ai_refine]
   before_action :validate_regenerate_part!, only: :regenerate_part
 
   helper_method :message_owner?
@@ -47,6 +47,24 @@ class MessagesController < ApplicationController
       format.turbo_stream { render partial: "messages/regenerate_part", locals: { part: part, message: @message } }
       format.html { redirect_to edit_message_path(@message) }
     end
+  end
+
+  def ai_refine
+    unless logged_in?
+      redirect_to login_path, alert: "AIブラッシュアップにはログインが必要です"
+      return
+    end
+
+    if current_user.ai_refine_limit_reached?
+      redirect_to message_path(@message), alert: "本日のAIブラッシュアップ回数（#{User::AI_REFINE_DAILY_LIMIT}回）に達しました"
+      return
+    end
+
+    refined_text = AiMessageRefiner.new(@message).refine
+    @message.update!(edited_content: refined_text, ai_refined_at: Time.current)
+    redirect_to message_path(@message), notice: "AIでメッセージをブラッシュアップしました"
+  rescue AiMessageRefiner::RefinementError
+    redirect_to message_path(@message), alert: "AI添削に失敗しました。しばらく経ってから再度お試しください"
   end
 
   def destroy

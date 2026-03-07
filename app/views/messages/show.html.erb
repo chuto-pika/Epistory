@@ -31,6 +31,22 @@
       </button>
     </div>
 
+    <% if logged_in? && message_owner? %>
+      <div class="mb-4">
+        <%= button_to ai_refine_message_path(@message),
+              method: :patch,
+              class: "w-full h-14 border-2 border-accent/20 text-accent rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-accent/5 transition-all disabled:opacity-40 disabled:cursor-not-allowed",
+              disabled: current_user.ai_refine_limit_reached?,
+              data: @message.edited_content.present? ? { turbo_confirm: "編集済みの内容がAIの添削結果に上書きされます。よろしいですか？" } : {},
+              form: { data: { turbo_submits_with: "AIでブラッシュアップ中..." } } do %>
+          <span class="material-symbols-outlined text-xl">auto_awesome</span>
+          AIでブラッシュアップ
+        <% end %>
+        <% remaining = User::AI_REFINE_DAILY_LIMIT - current_user.messages.where("ai_refined_at >= ?", Time.zone.now.beginning_of_day).count %>
+        <p class="text-center text-sm text-sub-text mt-2">本日の残り回数: <%= remaining %>/<%= User::AI_REFINE_DAILY_LIMIT %></p>
+      </div>
+    <% end %>
+
     <% if message_owner? && !@message.survey_answered? %>
       <%= render "messages/survey", message: @message %>
     <% end %>
