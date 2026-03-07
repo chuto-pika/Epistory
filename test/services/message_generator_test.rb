@@ -246,45 +246,45 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     message = build_message(feeling: @feeling_thanks, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"]
+    tone_templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"][:casual]
 
-    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
+    assert tone_templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "これからもよろしくの締めくくりが生成される" do
     message = build_message(feeling: @feeling_yoroshiku, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    templates = MessageGenerator::FEELING_TEMPLATES["これからもよろしく"]
+    tone_templates = MessageGenerator::FEELING_TEMPLATES["これからもよろしく"][:casual]
 
-    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
+    assert tone_templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "いつも助かっているの締めくくりが生成される" do
     message = build_message(feeling: @feeling_tasukaru, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    templates = MessageGenerator::FEELING_TEMPLATES["いつも助かっている"]
+    tone_templates = MessageGenerator::FEELING_TEMPLATES["いつも助かっている"][:casual]
 
-    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
+    assert tone_templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "大切に思っているの締めくくりが生成される" do
     message = build_message(feeling: @feeling_taisetsu, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    templates = MessageGenerator::FEELING_TEMPLATES["大切に思っている"]
+    tone_templates = MessageGenerator::FEELING_TEMPLATES["大切に思っている"][:casual]
 
-    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
+    assert tone_templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   test "ごめんね、そしてありがとうの締めくくりが生成される" do
     message = build_message(feeling: @feeling_gomenne, impressions: [@impression1])
     result = MessageGenerator.new(message).generate
 
-    templates = MessageGenerator::FEELING_TEMPLATES["ごめんね、そしてありがとう"]
+    tone_templates = MessageGenerator::FEELING_TEMPLATES["ごめんね、そしてありがとう"][:casual]
 
-    assert templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
+    assert tone_templates.any? { |t| result.include?(t) }, "締めくくりがテンプレートにマッチすること"
   end
 
   # --- additional_message ---
@@ -326,7 +326,7 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     assert imp1_templates.any? { |t| result.include?(t) }, "印象1の描写が含まれること"
     assert imp2_templates.any? { |t| result.include?(t) }, "印象2の描写が含まれること"
     assert_match(/いつも応援してくれてありがとう。/, result)
-    feeling_templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"]
+    feeling_templates = MessageGenerator::FEELING_TEMPLATES["ありがとう"][:casual]
 
     assert feeling_templates.any? { |t| result.include?(t) }, "締めくくりが含まれること"
     assert_match(/P\.S\. また帰るね。/, result)
@@ -491,7 +491,7 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     generator = MessageGenerator.new(message)
     future = generator.generate_future
 
-    templates = MessageGenerator::FUTURE_TEMPLATES["ありがとう"]
+    templates = MessageGenerator::FUTURE_TEMPLATES["ありがとう"][:casual]
 
     assert_includes templates, future, "futureがテンプレートにマッチすること"
   end
@@ -503,15 +503,17 @@ class MessageGeneratorTest < ActiveSupport::TestCase
       generator = MessageGenerator.new(message)
       future = generator.generate_future
 
-      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name]
+      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name][:casual]
 
       assert_includes templates, future, "#{feeling.name}のfutureがテンプレートにマッチすること"
     end
   end
 
-  test "全feelingのFUTURE_TEMPLATESが各2パターンある" do
-    MessageGenerator::FUTURE_TEMPLATES.each do |key, templates|
-      assert_equal 2, templates.size, "#{key}のfuture テンプレートが2パターンあること"
+  test "全feelingのFUTURE_TEMPLATESが各tone2パターンある" do
+    MessageGenerator::FUTURE_TEMPLATES.each do |key, tone_hash|
+      %i[casual friendly formal].each do |tone|
+        assert_equal 2, tone_hash[tone].size, "#{key}の#{tone}テンプレートが2パターンあること"
+      end
     end
   end
 
@@ -551,8 +553,6 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     message = build_message(impressions: [@impression1], episode: "テスト", additional_message: "追伸")
     generator = MessageGenerator.new(message)
 
-    # sampleでランダムなので同じインスタンスから呼ぶと異なる結果になり得る
-    # ただしgenerateが内部的にgenerate_parts→join_partsを使っていることを構造的に確認
     result = generator.generate
 
     assert_kind_of String, result
@@ -573,9 +573,12 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     end
   end
 
-  test "FEELING_TEMPLATESは各5パターン以上ある" do
-    MessageGenerator::FEELING_TEMPLATES.each do |key, templates|
-      assert_operator templates.size, :>=, 5, "#{key}のテンプレートが5パターン以上あること（実際: #{templates.size}）"
+  test "FEELING_TEMPLATESは各tone3パターン以上ある" do
+    MessageGenerator::FEELING_TEMPLATES.each do |key, tone_hash|
+      %i[casual friendly formal].each do |tone|
+        assert_operator tone_hash[tone].size, :>=, 3,
+                        "#{key}の#{tone}テンプレートが3パターン以上あること（実際: #{tone_hash[tone].size}）"
+      end
     end
   end
 
@@ -614,6 +617,128 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     assert_match(/\A(そしてなにより、|さらに、)/, lines[2], "3行目は強調接続詞で始まること")
   end
 
+  # --- RECIPIENT_TONES ---
+
+  test "RECIPIENT_TONESが全recipientをカバーしている" do
+    expected = {
+      "親" => :casual, "パートナー" => :casual, "友人" => :casual,
+      "兄弟・姉妹" => :casual, "祖父母" => :friendly,
+      "職場の人" => :formal, "その他" => :friendly
+    }
+
+    assert_equal expected, MessageGenerator::RECIPIENT_TONES
+  end
+
+  test "toneアクセサがrecipientに応じた値を返す" do
+    msg_casual = build_message(recipient: @recipient_parent, impressions: [@impression1])
+    msg_friendly = build_message(recipient: @recipient_grandparent, impressions: [@impression1])
+    msg_formal = build_message(recipient: @recipient_colleague, impressions: [@impression1])
+
+    assert_equal :casual, MessageGenerator.new(msg_casual).tone
+    assert_equal :friendly, MessageGenerator.new(msg_friendly).tone
+    assert_equal :formal, MessageGenerator.new(msg_formal).tone
+  end
+
+  # --- tone別 closing テスト ---
+
+  test "casual toneのclosingが各feelingで正しいテンプレートから生成される" do
+    casual_recipients = [@recipient_parent, @recipient_partner, @recipient_friend, @recipient_sibling]
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    casual_recipients.each do |recipient|
+      feelings.each do |feeling|
+        message = build_message(recipient: recipient, feeling: feeling, impressions: [@impression1])
+        generator = MessageGenerator.new(message)
+        closing = generator.generate_closing
+
+        templates = MessageGenerator::FEELING_TEMPLATES[feeling.name][:casual]
+
+        assert_includes templates, closing,
+                        "#{recipient.name}×#{feeling.name}のclosingがcasualテンプレートにマッチすること"
+      end
+    end
+  end
+
+  test "friendly toneのclosingが各feelingで正しいテンプレートから生成される" do
+    friendly_recipients = [@recipient_grandparent, @recipient_other]
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    friendly_recipients.each do |recipient|
+      feelings.each do |feeling|
+        message = build_message(recipient: recipient, feeling: feeling, impressions: [@impression1])
+        generator = MessageGenerator.new(message)
+        closing = generator.generate_closing
+
+        templates = MessageGenerator::FEELING_TEMPLATES[feeling.name][:friendly]
+
+        assert_includes templates, closing,
+                        "#{recipient.name}×#{feeling.name}のclosingがfriendlyテンプレートにマッチすること"
+      end
+    end
+  end
+
+  test "formal toneのclosingが各feelingで正しいテンプレートから生成される" do
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    feelings.each do |feeling|
+      message = build_message(recipient: @recipient_colleague, feeling: feeling, impressions: [@impression1])
+      generator = MessageGenerator.new(message)
+      closing = generator.generate_closing
+
+      templates = MessageGenerator::FEELING_TEMPLATES[feeling.name][:formal]
+
+      assert_includes templates, closing,
+                      "職場の人×#{feeling.name}のclosingがformalテンプレートにマッチすること"
+    end
+  end
+
+  # --- tone別 future テスト ---
+
+  test "casual toneのfutureが各feelingで正しいテンプレートから生成される" do
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    feelings.each do |feeling|
+      message = build_message(recipient: @recipient_parent, feeling: feeling, impressions: [@impression1])
+      generator = MessageGenerator.new(message)
+      future = generator.generate_future
+
+      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name][:casual]
+
+      assert_includes templates, future,
+                      "親×#{feeling.name}のfutureがcasualテンプレートにマッチすること"
+    end
+  end
+
+  test "friendly toneのfutureが各feelingで正しいテンプレートから生成される" do
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    feelings.each do |feeling|
+      message = build_message(recipient: @recipient_grandparent, feeling: feeling, impressions: [@impression1])
+      generator = MessageGenerator.new(message)
+      future = generator.generate_future
+
+      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name][:friendly]
+
+      assert_includes templates, future,
+                      "祖父母×#{feeling.name}のfutureがfriendlyテンプレートにマッチすること"
+    end
+  end
+
+  test "formal toneのfutureが各feelingで正しいテンプレートから生成される" do
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+
+    feelings.each do |feeling|
+      message = build_message(recipient: @recipient_colleague, feeling: feeling, impressions: [@impression1])
+      generator = MessageGenerator.new(message)
+      future = generator.generate_future
+
+      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name][:formal]
+
+      assert_includes templates, future,
+                      "職場の人×#{feeling.name}のfutureがformalテンプレートにマッチすること"
+    end
+  end
+
   # --- バリエーションテスト ---
 
   test "同じ入力でも生成構造が正しい" do
@@ -633,6 +758,26 @@ class MessageGeneratorTest < ActiveSupport::TestCase
 
       assert imp_templates.any? { |t| result.include?(t) }, "印象描写が含まれること"
       assert_match(/テストエピソード/, result)
+    end
+  end
+
+  # --- FEELING_TEMPLATESの全tone存在チェック ---
+
+  test "FEELING_TEMPLATESの全エントリにcasual/friendly/formalが揃っている" do
+    MessageGenerator::FEELING_TEMPLATES.each do |key, tone_hash|
+      %i[casual friendly formal].each do |tone|
+        assert tone_hash.key?(tone), "#{key}に#{tone}キーがあること"
+        assert_predicate tone_hash[tone], :present?, "#{key}の#{tone}が空でないこと"
+      end
+    end
+  end
+
+  test "FUTURE_TEMPLATESの全エントリにcasual/friendly/formalが揃っている" do
+    MessageGenerator::FUTURE_TEMPLATES.each do |key, tone_hash|
+      %i[casual friendly formal].each do |tone|
+        assert tone_hash.key?(tone), "#{key}に#{tone}キーがあること"
+        assert_predicate tone_hash[tone], :present?, "#{key}の#{tone}が空でないこと"
+      end
     end
   end
 end
