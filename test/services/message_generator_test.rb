@@ -177,7 +177,7 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     assert templates.any? { |t| result.include?(t) }, "印象描写がテンプレートにマッチすること"
   end
 
-  test "impression2つの場合は両方の描写が含まれる" do
+  test "impression2つの場合は両方の描写と接続詞が含まれる" do
     message = build_message(impressions: [@impression1, @impression2])
     result = MessageGenerator.new(message).generate
 
@@ -186,9 +186,13 @@ class MessageGeneratorTest < ActiveSupport::TestCase
 
     assert templates1.any? { |t| result.include?(t) }, "1つ目の印象描写が含まれること"
     assert templates2.any? { |t| result.include?(t) }, "2つ目の印象描写が含まれること"
+
+    connectors = MessageGenerator::IMPRESSION_CONNECTORS
+
+    assert connectors.any? { |c| result.include?(c) }, "接続詞が含まれること"
   end
 
-  test "impression3つの場合は全ての描写が含まれる" do
+  test "impression3つの場合は全ての描写と接続詞が含まれる" do
     message = build_message(impressions: [@impression1, @impression2, @impression3])
     result = MessageGenerator.new(message).generate
 
@@ -452,6 +456,61 @@ class MessageGeneratorTest < ActiveSupport::TestCase
 
     assert_kind_of String, result
     assert_predicate result, :present?
+  end
+
+  # --- テンプレート数の検証 ---
+
+  test "OCCASION_TEMPLATESは各5パターン以上ある" do
+    MessageGenerator::OCCASION_TEMPLATES.each do |key, templates|
+      assert_operator templates.size, :>=, 5, "#{key}のテンプレートが5パターン以上あること（実際: #{templates.size}）"
+    end
+  end
+
+  test "IMPRESSION_TEMPLATESは各5パターン以上ある" do
+    MessageGenerator::IMPRESSION_TEMPLATES.each do |key, templates|
+      assert_operator templates.size, :>=, 5, "#{key}のテンプレートが5パターン以上あること（実際: #{templates.size}）"
+    end
+  end
+
+  test "FEELING_TEMPLATESは各5パターン以上ある" do
+    MessageGenerator::FEELING_TEMPLATES.each do |key, templates|
+      assert_operator templates.size, :>=, 5, "#{key}のテンプレートが5パターン以上あること（実際: #{templates.size}）"
+    end
+  end
+
+  test "IMPRESSION_CONNECTORSが5パターンある" do
+    assert_equal 5, MessageGenerator::IMPRESSION_CONNECTORS.size
+  end
+
+  test "IMPRESSION_TEMPLATESで「あなた」を使用していない" do
+    MessageGenerator::IMPRESSION_TEMPLATES.each do |key, templates|
+      templates.each_with_index do |t, i|
+        assert_not_includes t, "あなた", "#{key}のパターン#{i + 1}に「あなた」が含まれていないこと"
+      end
+    end
+  end
+
+  # --- 連結ロジックテスト ---
+
+  test "impression2つの場合に改行で区切られる" do
+    message = build_message(impressions: [@impression1, @impression2])
+    generator = MessageGenerator.new(message)
+    impression_text = generator.generate_impression
+
+    assert_includes impression_text, "\n", "改行で区切られていること"
+  end
+
+  test "impression3つの場合に改行で区切られ接続詞が2つ含まれる" do
+    message = build_message(impressions: [@impression1, @impression2, @impression3])
+    generator = MessageGenerator.new(message)
+    impression_text = generator.generate_impression
+
+    lines = impression_text.split("\n")
+
+    assert_equal 3, lines.size, "3行に分かれていること"
+    assert_no_match(/\A(そして|それに|それだけでなく|さらに|そしてなにより)/, lines[0], "1行目は接続詞なし")
+    assert_match(/\A(そして、|それに、)/, lines[1], "2行目は接続詞で始まること")
+    assert_match(/\A(そしてなにより、|さらに、)/, lines[2], "3行目は強調接続詞で始まること")
   end
 
   # --- バリエーションテスト ---
