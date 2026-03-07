@@ -76,6 +76,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.8)
       public_suffix (>= 2.0.2, < 8.0)
+    anthropic (1.23.0)
+      cgi
+      connection_pool
     ast (2.4.3)
     base64 (0.3.0)
     benchmark (0.5.0)
@@ -98,7 +101,9 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    cgi (0.5.1)
     concurrent-ruby (1.3.6)
+    connection_pool (3.0.2)
     crass (1.0.6)
     date (3.5.1)
     debug (1.11.1)
@@ -344,6 +349,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  anthropic
   bootsnap
   brakeman
   bundler-audit
