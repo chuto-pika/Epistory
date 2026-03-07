@@ -1,5 +1,5 @@
 class MessageGenerator # rubocop:disable Metrics/ClassLength
-  REGENERABLE_PARTS = %w[opening impression episode closing].freeze
+  REGENERABLE_PARTS = %w[opening impression episode future closing].freeze
 
   HONORIFICS = {
     "親" => "お父さん・お母さん",
@@ -138,6 +138,57 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
     ]
   }.freeze
 
+  BRIDGE_TEMPLATES = {
+    "誕生日・記念日" => [
+      "こうして振り返ると、",
+      "改めて思い返してみると、",
+      "この節目に改めて感じるのは、"
+    ],
+    "日頃の感謝" => [
+      "日頃から感じていることだけど、",
+      "普段はなかなか言えないけれど、",
+      "改めて思うのは、"
+    ],
+    "最近助けてもらった" => [
+      "そのときに改めて感じたのは、",
+      "あのとき思ったのは、",
+      "そのことがきっかけで改めて気づいたのは、"
+    ],
+    "しばらく会えていない" => [
+      "離れていて改めて感じるのは、",
+      "会えない時間の中で気づいたのは、",
+      "距離があるからこそ分かることがあって、"
+    ],
+    "特別な理由はない" => [
+      "ふと思うのは、",
+      "改めて感じるのは、",
+      "何気ない日常の中で思うのは、"
+    ]
+  }.freeze
+
+  FUTURE_TEMPLATES = {
+    "ありがとう" => [
+      "これからも、感謝の気持ちを忘れずにいたいです。",
+      "この先もずっと、ありがとうを伝え続けたいです。"
+    ],
+    "これからもよろしく" => [
+      "これから先も、一緒にたくさんの思い出をつくっていけたらうれしいです。",
+      "これからの日々も、変わらずそばにいてくれたらうれしいです。"
+    ],
+    "いつも助かっている" => [
+      "私もいつか、同じように誰かの力になれたらと思います。",
+      "これからは、私も少しでも恩返しができたらと思っています。"
+    ],
+    "大切に思っている" => [
+      "これから先も、この気持ちは変わりません。",
+      "この先もずっと、大切に思い続けます。"
+    ],
+    "ごめんね、そしてありがとう" => [
+      "少しずつでも、素直に気持ちを伝えられるようになりたいです。",
+      "これからは、もっと気持ちを伝えていけたらと思います。"
+    ]
+  }.freeze
+
   IMPRESSION_CONNECTORS = [
     "そして、",
     "それに、",
@@ -175,8 +226,10 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
   def generate_parts
     parts = {}
     parts["opening"] = generate_opening
+    parts["bridge"] = generate_bridge
     parts["impression"] = generate_impression
     parts["episode"] = generate_episode
+    parts["future"] = generate_future
     parts["closing"] = generate_closing
     parts["ps"] = generate_ps
     parts.compact
@@ -191,7 +244,7 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
   end
 
   def self.join_parts(parts)
-    ordered = %w[opening impression episode closing ps]
+    ordered = %w[opening bridge impression episode future closing ps]
     ordered.filter_map { |key| parts[key] }.join("\n\n")
   end
 
@@ -227,6 +280,18 @@ class MessageGenerator # rubocop:disable Metrics/ClassLength
     intro = EPISODE_INTROS.sample
     outro = EPISODE_OUTROS.sample
     "#{intro}#{@episode}\n#{outro}"
+  end
+
+  def generate_bridge
+    return nil if @impressions.empty?
+
+    templates = BRIDGE_TEMPLATES[@occasion.name]
+    templates&.sample
+  end
+
+  def generate_future
+    templates = FUTURE_TEMPLATES[@feeling.name]
+    templates&.sample
   end
 
   def generate_closing
