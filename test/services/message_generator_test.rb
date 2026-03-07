@@ -356,17 +356,20 @@ class MessageGeneratorTest < ActiveSupport::TestCase
 
     assert_kind_of Hash, parts
     assert_includes parts.keys, "opening"
+    assert_includes parts.keys, "bridge"
     assert_includes parts.keys, "impression"
     assert_includes parts.keys, "episode"
+    assert_includes parts.keys, "future"
     assert_includes parts.keys, "closing"
     assert_includes parts.keys, "ps"
   end
 
-  test "generate_partsでimpressionなしの場合はimpressionキーが含まれない" do
+  test "generate_partsでimpressionなしの場合はimpressionとbridgeキーが含まれない" do
     message = build_message(impressions: [])
     parts = MessageGenerator.new(message).generate_parts
 
     assert_not_includes parts.keys, "impression"
+    assert_not_includes parts.keys, "bridge"
   end
 
   test "generate_partsでepisodeなしの場合はepisodeキーが含まれない" do
@@ -434,14 +437,112 @@ class MessageGeneratorTest < ActiveSupport::TestCase
     assert_equal "開き\n\n印象\n\n締め", result
   end
 
-  # --- REGENERABLE_PARTS ---
+  test "join_partsはbridge・futureを含む7パーツの順序を維持する" do
+    parts = {
+      "ps" => "追伸",
+      "future" => "未来",
+      "closing" => "締め",
+      "bridge" => "架け橋",
+      "opening" => "開き",
+      "impression" => "印象",
+      "episode" => "エピソード"
+    }
+    result = MessageGenerator.join_parts(parts)
 
-  test "REGENERABLE_PARTSにpsが含まれない" do
-    assert_not_includes MessageGenerator::REGENERABLE_PARTS, "ps"
+    assert_equal "開き\n\n架け橋\n\n印象\n\nエピソード\n\n未来\n\n締め\n\n追伸", result
   end
 
-  test "REGENERABLE_PARTSに4つのパートが含まれる" do
-    assert_equal %w[opening impression episode closing], MessageGenerator::REGENERABLE_PARTS
+  # --- bridge ---
+
+  test "bridgeがoccasionに対応するテンプレートから生成される" do
+    message = build_message(occasion: @occasion_birthday, impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+    bridge = generator.generate_bridge
+
+    templates = MessageGenerator::BRIDGE_TEMPLATES["誕生日・記念日"]
+
+    assert_includes templates, bridge, "bridgeがテンプレートにマッチすること"
+  end
+
+  test "bridgeはimpressionが空の場合はnilを返す" do
+    message = build_message(impressions: [])
+    generator = MessageGenerator.new(message)
+
+    assert_nil generator.generate_bridge
+  end
+
+  test "bridgeはoccasionが「その他」の場合はnilを返す" do
+    message = build_message(occasion: @occasion_other, impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+
+    assert_nil generator.generate_bridge
+  end
+
+  test "全occasionのBRIDGE_TEMPLATESが各3パターンある" do
+    MessageGenerator::BRIDGE_TEMPLATES.each do |key, templates|
+      assert_equal 3, templates.size, "#{key}のbridge テンプレートが3パターンあること"
+    end
+  end
+
+  # --- future ---
+
+  test "futureがfeelingに対応するテンプレートから生成される" do
+    message = build_message(feeling: @feeling_thanks, impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+    future = generator.generate_future
+
+    templates = MessageGenerator::FUTURE_TEMPLATES["ありがとう"]
+
+    assert_includes templates, future, "futureがテンプレートにマッチすること"
+  end
+
+  test "futureは各feelingで生成される" do
+    feelings = [@feeling_thanks, @feeling_yoroshiku, @feeling_tasukaru, @feeling_taisetsu, @feeling_gomenne]
+    feelings.each do |feeling|
+      message = build_message(feeling: feeling, impressions: [@impression1])
+      generator = MessageGenerator.new(message)
+      future = generator.generate_future
+
+      templates = MessageGenerator::FUTURE_TEMPLATES[feeling.name]
+
+      assert_includes templates, future, "#{feeling.name}のfutureがテンプレートにマッチすること"
+    end
+  end
+
+  test "全feelingのFUTURE_TEMPLATESが各2パターンある" do
+    MessageGenerator::FUTURE_TEMPLATES.each do |key, templates|
+      assert_equal 2, templates.size, "#{key}のfuture テンプレートが2パターンあること"
+    end
+  end
+
+  test "generate_partでfutureを個別生成できる" do
+    message = build_message(impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+    result = generator.generate_part("future")
+
+    assert_kind_of String, result
+  end
+
+  test "generate_partでbridgeはArgumentError" do
+    message = build_message(impressions: [@impression1])
+    generator = MessageGenerator.new(message)
+
+    assert_raises(ArgumentError) { generator.generate_part("bridge") }
+  end
+
+  # --- REGENERABLE_PARTS ---
+
+  test "REGENERABLE_PARTSにpsとbridgeが含まれない" do
+    assert_not_includes MessageGenerator::REGENERABLE_PARTS, "ps"
+    assert_not_includes MessageGenerator::REGENERABLE_PARTS, "bridge"
+  end
+
+  test "REGENERABLE_PARTSにfutureが含まれる" do
+    assert_includes MessageGenerator::REGENERABLE_PARTS, "future"
+  end
+
+  test "REGENERABLE_PARTSに5つのパートが含まれる" do
+    assert_equal %w[opening impression episode future closing], MessageGenerator::REGENERABLE_PARTS
   end
 
   # --- generateの後方互換性 ---
