@@ -17,7 +17,7 @@ class AiMessageRefiner
   end
 
   def refine
-    client = Anthropic::Client.new
+    client = ::Anthropic::Client.new
     response = client.messages.create(
       model: "claude-haiku-4-5-20241022",
       max_tokens: 1024,
@@ -28,7 +28,7 @@ class AiMessageRefiner
     )
 
     extract_text(response)
-  rescue Anthropic::Errors::Error => e
+  rescue ::Anthropic::Errors::Error => e
     raise RefinementError, "AI添削に失敗しました: #{e.message}"
   end
 
