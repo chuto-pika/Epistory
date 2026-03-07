@@ -400,6 +400,86 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller='survey']", count: 0
   end
 
+  # === ai_refine ===
+  test "ai_refine redirects to login for guest" do
+    message = create_message_via_steps
+
+    patch ai_refine_message_path(message)
+
+    assert_redirected_to login_path
+  end
+
+  test "ai_refine updates edited_content and ai_refined_at for logged in user" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    mock_refiner = Object.new
+    mock_refiner.define_singleton_method(:refine) { "AIで改善されたメッセージ" }
+
+    AiMessageRefiner.stub(:new, mock_refiner) do
+      patch ai_refine_message_path(message)
+    end
+
+    message.reload
+
+    assert_equal "AIで改善されたメッセージ", message.edited_content
+    assert_not_nil message.ai_refined_at
+    assert_redirected_to message_path(message)
+  end
+
+  test "ai_refine shows error when daily limit reached" do
+    user = users(:alice)
+    sign_in_as(user)
+    message = create_message_via_steps
+
+    # 制限到達分のメッセージを作成
+    User::AI_REFINE_DAILY_LIMIT.times do
+      Message.create!(
+        user: user,
+        recipient: message.recipient,
+        occasion: message.occasion,
+        feeling: message.feeling,
+        generated_content: "テスト",
+        ai_refined_at: Time.current
+      )
+    end
+
+    patch ai_refine_message_path(message)
+
+    assert_redirected_to message_path(message)
+    assert_match "回数", flash[:alert]
+  end
+
+  test "ai_refine shows error on API failure" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+    original_content = message.generated_content
+
+    mock_refiner = Object.new
+    mock_refiner.define_singleton_method(:refine) { raise AiMessageRefiner::RefinementError, "API error" }
+
+    AiMessageRefiner.stub(:new, mock_refiner) do
+      patch ai_refine_message_path(message)
+    end
+
+    assert_redirected_to message_path(message)
+    assert_match "AI添削に失敗しました", flash[:alert]
+    assert_equal original_content, message.reload.generated_content
+    assert_nil message.edited_content
+  end
+
+  test "ai_refine rejects other users message" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    reset!
+    sign_in_as(users(:bob))
+
+    patch ai_refine_message_path(message)
+
+    assert_redirected_to root_path
+  end
+
   private
 
   def complete_all_steps

@@ -74,6 +74,44 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test "ai_refine_limit_reached? returns false when no messages today" do
+    user = users(:alice)
+
+    assert_not user.ai_refine_limit_reached?
+  end
+
+  test "ai_refine_limit_reached? returns true when limit is reached" do
+    user = users(:alice)
+    User::AI_REFINE_DAILY_LIMIT.times do
+      Message.create!(
+        user: user,
+        recipient: recipients(:parent),
+        occasion: occasions(:birthday),
+        feeling: feelings(:thanks),
+        generated_content: "テスト",
+        ai_refined_at: Time.current
+      )
+    end
+
+    assert_predicate user, :ai_refine_limit_reached?
+  end
+
+  test "ai_refine_limit_reached? does not count yesterdays messages" do
+    user = users(:alice)
+    User::AI_REFINE_DAILY_LIMIT.times do
+      Message.create!(
+        user: user,
+        recipient: recipients(:parent),
+        occasion: occasions(:birthday),
+        feeling: feelings(:thanks),
+        generated_content: "テスト",
+        ai_refined_at: 1.day.ago
+      )
+    end
+
+    assert_not user.ai_refine_limit_reached?
+  end
+
   private
 
   def mock_auth_hash(uid:, name:, email:, image:)
