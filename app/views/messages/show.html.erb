@@ -1,7 +1,7 @@
 <section class="py-12 px-6"
          data-controller="back-navigation"
          data-back-navigation-step6-url-value="<%= step6_message_path %>">
-  <div class="mx-auto max-w-2xl" data-controller="clipboard">
+  <div class="mx-auto max-w-2xl" data-controller="clipboard image-export">
     <div class="relative text-center mb-8">
       <%= link_to step6_message_path,
             class: "absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full border-2 border-primary/20 text-sub-text hover:text-primary hover:bg-primary/5 transition-all",
@@ -29,6 +29,32 @@
         <span class="material-symbols-outlined text-xl">content_copy</span>
         コピーする
       </button>
+    </div>
+
+    <button type="button" data-image-export-target="button" data-action="click->image-export#save"
+            class="w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all mb-4">
+      <span class="material-symbols-outlined text-xl">image</span>
+      画像で保存する
+    </button>
+
+    <%# 画像出力用（非表示） %>
+    <div data-image-export-target="source" style="display:none; width:1080px; font-family:'Klee One',serif; background-color:#C5CEB5; padding:40px; position:relative;">
+      <%# 白い紙面 %>
+      <div style="background-color:#FAFAF5; border-radius:16px; position:relative; overflow:hidden; min-height:600px;">
+        <%# 左上の葉っぱ装飾 %>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjgwIDI0MCI+CiAgPHBhdGggZD0iTTAsMjUgQzUwLDMwIDEwMCw1MCAxNTAsMTAwIEMxODUsMTMwIDIxNSwxNzAgMjQwLDIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzBBODgwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik01MCwzNSBDNDAsNjAgMzAsOTAgMjIsMTI1IiBmaWxsPSJub25lIiBzdHJva2U9IiNDMEE4ODAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8ZWxsaXBzZSBjeD0iMTgiIGN5PSIxNSIgcng9IjIyIiByeT0iOCIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwLDE4LDE1KSIgZmlsbD0iIzhBOUI2OCIvPgogIDxlbGxpcHNlIGN4PSIzNSIgY3k9IjEyIiByeD0iMjAiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgxNSwzNSwxMikiIGZpbGw9IiM5RUFFN0MiLz4KICA8ZWxsaXBzZSBjeD0iNTgiIGN5PSIzMiIgcng9IjIyIiByeT0iOCIgdHJhbnNmb3JtPSJyb3RhdGUoLTI1LDU4LDMyKSIgZmlsbD0iIzdEOEU1QiIvPgogIDxlbGxpcHNlIGN4PSI3NSIgY3k9IjMwIiByeD0iMjAiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgyMCw3NSwzMCkiIGZpbGw9IiM4QTlCNjgiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNTIiIHJ4PSIyMiIgcnk9IjgiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwxMDAsNTIpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjExNSIgY3k9IjU1IiByeD0iMjAiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgyNSwxMTUsNTUpIiBmaWxsPSIjN0Q4RTVCIi8+CiAgPGVsbGlwc2UgY3g9IjEzOCIgY3k9IjgwIiByeD0iMjIiIHJ5PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTUsMTM4LDgwKSIgZmlsbD0iIzhBOUI2OCIvPgogIDxlbGxpcHNlIGN4PSIxNTIiIGN5PSI4NSIgcng9IjIwIiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoMjAsMTUyLDg1KSIgZmlsbD0iIzlFQUU3QyIvPgogIDxlbGxpcHNlIGN4PSIxNzUiIGN5PSIxMTIiIHJ4PSIyMiIgcnk9IjgiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwxNzUsMTEyKSIgZmlsbD0iIzdEOEU1QiIvPgogIDxlbGxpcHNlIGN4PSIxODgiIGN5PSIxMTgiIHJ4PSIyMCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKDI1LDE4OCwxMTgpIiBmaWxsPSIjOEE5QjY4Ii8+CiAgPGVsbGlwc2UgY3g9IjIwOCIgY3k9IjE0OCIgcng9IjIwIiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1LDIwOCwxNDgpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjM4IiBjeT0iNTUiIHJ4PSIxOCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKC00MCwzOCw1NSkiIGZpbGw9IiM4QTlCNjgiLz4KICA8ZWxsaXBzZSBjeD0iNDUiIGN5PSI2MiIgcng9IjE2IiByeT0iNiIgdHJhbnNmb3JtPSJyb3RhdGUoMjAsNDUsNjIpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjMwIiBjeT0iODIiIHJ4PSIxOCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKC0zNSwzMCw4MikiIGZpbGw9IiM3RDhFNUIiLz4KICA8ZWxsaXBzZSBjeD0iMzYiIGN5PSI5MCIgcng9IjE2IiByeT0iNiIgdHJhbnNmb3JtPSJyb3RhdGUoMjIsMzYsOTApIiBmaWxsPSIjOEE5QjY4Ii8+CiAgPGVsbGlwc2UgY3g9IjI0IiBjeT0iMTA4IiByeD0iMTgiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgtMzgsMjQsMTA4KSIgZmlsbD0iIzlFQUU3QyIvPgogIDxlbGxpcHNlIGN4PSIyOCIgY3k9IjExNiIgcng9IjE2IiByeT0iNiIgdHJhbnNmb3JtPSJyb3RhdGUoMTgsMjgsMTE2KSIgZmlsbD0iIzhBOUI2OCIvPgo8L3N2Zz4K" style="position:absolute; top:-10px; left:-10px; width:260px; height:220px; z-index:2;">
+        <%# 右下の葉っぱ装飾 %>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjQwIDIwMCI+CiAgPHBhdGggZD0iTTI0MCwxNzUgQzE5MCwxNzAgMTQwLDE1MCA5MCwxMDAgQzU1LDcwIDI1LDMwIDAsLTEwIiBmaWxsPSJub25lIiBzdHJva2U9IiNDMEE4ODAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTE5MCwxNjUgQzIwMCwxNDAgMjEwLDExMCAyMTgsNzUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0MwQTg4MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxlbGxpcHNlIGN4PSIyMjIiIGN5PSIxODUiIHJ4PSIyMiIgcnk9IjgiIHRyYW5zZm9ybT0icm90YXRlKDE1MCwyMjIsMTg1KSIgZmlsbD0iIzhBOUI2OCIvPgogIDxlbGxpcHNlIGN4PSIyMDUiIGN5PSIxODgiIHJ4PSIyMCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKC0xNjUsMjA1LDE4OCkiIGZpbGw9IiM5RUFFN0MiLz4KICA8ZWxsaXBzZSBjeD0iMTgyIiBjeT0iMTY4IiByeD0iMjIiIHJ5PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgxNTUsMTgyLDE2OCkiIGZpbGw9IiM3RDhFNUIiLz4KICA8ZWxsaXBzZSBjeD0iMTY1IiBjeT0iMTcwIiByeD0iMjAiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTYwLDE2NSwxNzApIiBmaWxsPSIjOEE5QjY4Ii8+CiAgPGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE0OCIgcng9IjIyIiByeT0iOCIgdHJhbnNmb3JtPSJyb3RhdGUoMTYwLDE0MCwxNDgpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjEyNSIgY3k9IjE0NSIgcng9IjIwIiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1NSwxMjUsMTQ1KSIgZmlsbD0iIzdEOEU1QiIvPgogIDxlbGxpcHNlIGN4PSIxMDIiIGN5PSIxMjAiIHJ4PSIyMiIgcnk9IjgiIHRyYW5zZm9ybT0icm90YXRlKDE2NSwxMDIsMTIwKSIgZmlsbD0iIzhBOUI2OCIvPgogIDxlbGxpcHNlIGN4PSI4OCIgY3k9IjExNSIgcng9IjIwIiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE2MCw4OCwxMTUpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjY1IiBjeT0iODgiIHJ4PSIyMCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKDE2MCw2NSw4OCkiIGZpbGw9IiM3RDhFNUIiLz4KICA8ZWxsaXBzZSBjeD0iNTIiIGN5PSI4MiIgcng9IjIwIiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1NSw1Miw4MikiIGZpbGw9IiM4QTlCNjgiLz4KICA8ZWxsaXBzZSBjeD0iMjAyIiBjeT0iMTQ1IiByeD0iMTgiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgxNDAsMjAyLDE0NSkiIGZpbGw9IiM4QTlCNjgiLz4KICA8ZWxsaXBzZSBjeD0iMTk1IiBjeT0iMTM4IiByeD0iMTYiIHJ5PSI2IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTYwLDE5NSwxMzgpIiBmaWxsPSIjOUVBRTdDIi8+CiAgPGVsbGlwc2UgY3g9IjIxMCIgY3k9IjExOCIgcng9IjE4IiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoMTQ1LDIxMCwxMTgpIiBmaWxsPSIjN0Q4RTVCIi8+CiAgPGVsbGlwc2UgY3g9IjIwNCIgY3k9IjExMCIgcng9IjE2IiByeT0iNiIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1OCwyMDQsMTEwKSIgZmlsbD0iIzhBOUI2OCIvPgogIDxlbGxpcHNlIGN4PSIyMTYiIGN5PSI5MiIgcng9IjE4IiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoMTQyLDIxNiw5MikiIGZpbGw9IiM5RUFFN0MiLz4KICA8ZWxsaXBzZSBjeD0iMjEyIiBjeT0iODQiIHJ4PSIxNiIgcnk9IjYiIHRyYW5zZm9ybT0icm90YXRlKC0xNjIsMjEyLDg0KSIgZmlsbD0iIzhBOUI2OCIvPgo8L3N2Zz4K" style="position:absolute; bottom:-10px; right:-10px; width:220px; height:185px; z-index:2;">
+        <%# 罫線付き本文エリア %>
+        <div style="padding:100px 80px 60px; position:relative; z-index:1; background-image:repeating-linear-gradient(transparent, transparent calc(2.8rem - 1px), rgba(0,0,0,0.12) calc(2.8rem - 1px), rgba(0,0,0,0.12) 2.8rem); background-position:0 1.8rem;">
+          <% @message.display_content.split("\n\n").each do |paragraph| %>
+            <p style="font-size:28px; line-height:2.8rem; color:#3d3837; margin:0 0 2.8rem 0;"><%= sanitize(h(paragraph).gsub("\n", "<br>"), tags: %w[br]) %></p>
+          <% end %>
+        </div>
+        <div style="padding:16px 80px 40px; text-align:right; position:relative; z-index:1;">
+          <span style="font-size:18px; color:#a09590; font-style:italic;">Epistory で作成</span>
+        </div>
+      </div>
     </div>
 
     <% if message_owner? && !@message.survey_answered? %>
