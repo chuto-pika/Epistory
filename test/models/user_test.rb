@@ -74,7 +74,7 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "ai_refine_limit_reached? returns false when no messages today" do
+  test "ai_refine_limit_reached? returns false when no usage today" do
     user = users(:alice)
 
     assert_not user.ai_refine_limit_reached?
@@ -82,34 +82,35 @@ class UserTest < ActiveSupport::TestCase
 
   test "ai_refine_limit_reached? returns true when limit is reached" do
     user = users(:alice)
-    User::AI_REFINE_DAILY_LIMIT.times do
-      Message.create!(
-        user: user,
-        recipient: recipients(:parent),
-        occasion: occasions(:birthday),
-        feeling: feelings(:thanks),
-        generated_content: "テスト",
-        ai_refined_at: Time.current
-      )
-    end
+    user.update!(ai_refine_daily_used: User::AI_REFINE_DAILY_LIMIT, ai_refine_usage_date: Time.zone.today)
 
     assert_predicate user, :ai_refine_limit_reached?
   end
 
-  test "ai_refine_limit_reached? does not count yesterdays messages" do
+  test "ai_refine_limit_reached? does not count yesterdays usage" do
     user = users(:alice)
-    User::AI_REFINE_DAILY_LIMIT.times do
-      Message.create!(
-        user: user,
-        recipient: recipients(:parent),
-        occasion: occasions(:birthday),
-        feeling: feelings(:thanks),
-        generated_content: "テスト",
-        ai_refined_at: 1.day.ago
-      )
-    end
+    user.update!(ai_refine_daily_used: User::AI_REFINE_DAILY_LIMIT, ai_refine_usage_date: 1.day.ago)
 
     assert_not user.ai_refine_limit_reached?
+  end
+
+  test "increment_ai_refine_usage! increments counter for today" do
+    user = users(:alice)
+    user.update!(ai_refine_daily_used: 2, ai_refine_usage_date: Time.zone.today)
+
+    user.increment_ai_refine_usage!
+
+    assert_equal 3, user.reload.ai_refine_daily_used
+  end
+
+  test "increment_ai_refine_usage! resets counter when date changes" do
+    user = users(:alice)
+    user.update!(ai_refine_daily_used: 5, ai_refine_usage_date: 1.day.ago)
+
+    user.increment_ai_refine_usage!
+
+    assert_equal 1, user.reload.ai_refine_daily_used
+    assert_equal Time.zone.today, user.ai_refine_usage_date
   end
 
   private

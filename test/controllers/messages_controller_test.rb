@@ -432,17 +432,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(user)
     message = create_message_via_steps
 
-    # 制限到達分のメッセージを作成
-    User::AI_REFINE_DAILY_LIMIT.times do
-      Message.create!(
-        user: user,
-        recipient: message.recipient,
-        occasion: message.occasion,
-        feeling: message.feeling,
-        generated_content: "テスト",
-        ai_refined_at: Time.current
-      )
-    end
+    user.update!(ai_refine_daily_used: User::AI_REFINE_DAILY_LIMIT, ai_refine_usage_date: Time.zone.today)
 
     patch ai_refine_message_path(message)
 
@@ -466,6 +456,36 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_match "AI添削に失敗しました", flash[:alert]
     assert_equal original_content, message.reload.generated_content
     assert_nil message.edited_content
+  end
+
+  test "ai_refine with style parameter updates edited_content" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    mock_refiner = Object.new
+    mock_refiner.define_singleton_method(:refine) { "カジュアルに改善されたメッセージ" }
+
+    AiMessageRefiner.stub(:new, mock_refiner) do
+      patch ai_refine_message_path(message), params: { style: "casual" }
+    end
+
+    assert_equal "カジュアルに改善されたメッセージ", message.reload.edited_content
+    assert_redirected_to message_path(message)
+  end
+
+  test "ai_refine with invalid style ignores it" do
+    sign_in_as(users(:alice))
+    message = create_message_via_steps
+
+    mock_refiner = Object.new
+    mock_refiner.define_singleton_method(:refine) { "通常の改善メッセージ" }
+
+    AiMessageRefiner.stub(:new, mock_refiner) do
+      patch ai_refine_message_path(message), params: { style: "invalid" }
+    end
+
+    assert_equal "通常の改善メッセージ", message.reload.edited_content
+    assert_redirected_to message_path(message)
   end
 
   test "ai_refine rejects other users message" do

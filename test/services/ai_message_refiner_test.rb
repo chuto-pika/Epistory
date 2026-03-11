@@ -11,9 +11,9 @@ class AiMessageRefinerTest < ActiveSupport::TestCase
   end
 
   test "refine returns refined text from API" do
-    mock_response = mock_api_response("ブラッシュアップされたメッセージ")
+    mock_response = mock_openai_response("ブラッシュアップされたメッセージ")
 
-    stub_anthropic_create(mock_response) do
+    stub_openai_chat(mock_response) do
       result = AiMessageRefiner.new(@message).refine
 
       assert_equal "ブラッシュアップされたメッセージ", result
@@ -21,29 +21,28 @@ class AiMessageRefinerTest < ActiveSupport::TestCase
   end
 
   test "refine sends generated_content to API" do
-    captured_messages = nil
-    mock_response = mock_api_response("結果")
+    captured_params = nil
+    mock_response = mock_openai_response("結果")
 
-    mock_messages_resource = Object.new
-    mock_messages_resource.define_singleton_method(:create) do |**kwargs|
-      captured_messages = kwargs[:messages]
+    mock_client = Object.new
+    mock_client.define_singleton_method(:chat) do |parameters:|
+      captured_params = parameters
       mock_response
     end
 
-    mock_client = Object.new
-    mock_client.define_singleton_method(:messages) { mock_messages_resource }
-
-    Anthropic::Client.stub(:new, mock_client) do
+    OpenAI::Client.stub(:new, mock_client) do
       AiMessageRefiner.new(@message).refine
     end
 
-    assert_equal @message.generated_content, captured_messages.first[:content]
+    user_message = captured_params[:messages].find { |m| m[:role] == "user" }
+
+    assert_equal @message.generated_content, user_message[:content]
   end
 
   test "refine raises RefinementError on empty response" do
-    mock_response = mock_api_response("")
+    mock_response = mock_openai_response("")
 
-    stub_anthropic_create(mock_response) do
+    stub_openai_chat(mock_response) do
       assert_raises(AiMessageRefiner::RefinementError) do
         AiMessageRefiner.new(@message).refine
       end
@@ -51,15 +50,12 @@ class AiMessageRefinerTest < ActiveSupport::TestCase
   end
 
   test "refine raises RefinementError on API error" do
-    mock_messages_resource = Object.new
-    mock_messages_resource.define_singleton_method(:create) do |**|
-      raise Anthropic::Errors::APIConnectionError.new(url: "https://api.anthropic.com", message: "connection failed")
+    mock_client = Object.new
+    mock_client.define_singleton_method(:chat) do |**|
+      raise Faraday::ConnectionFailed, "connection failed"
     end
 
-    mock_client = Object.new
-    mock_client.define_singleton_method(:messages) { mock_messages_resource }
-
-    Anthropic::Client.stub(:new, mock_client) do
+    OpenAI::Client.stub(:new, mock_client) do
       error = assert_raises(AiMessageRefiner::RefinementError) do
         AiMessageRefiner.new(@message).refine
       end
@@ -68,22 +64,77 @@ class AiMessageRefinerTest < ActiveSupport::TestCase
     end
   end
 
-  MockContent = Struct.new(:text)
-  MockResponse = Struct.new(:content)
+  test "refine with style includes style instruction in system prompt" do
+    captured_params = nil
+    mock_response = mock_openai_response("カジュアルなメッセージ")
+
+    mock_client = Object.new
+    mock_client.define_singleton_method(:chat) do |parameters:|
+      captured_params = parameters
+      mock_response
+    end
+
+    OpenAI::Client.stub(:new, mock_client) do
+      AiMessageRefiner.new(@message, style: "casual").refine
+    end
+
+    system_message = captured_params[:messages].find { |m| m[:role] == "system" }
+
+    assert_includes system_message[:content], "カジュアルで親しみやすい口調"
+  end
+
+  test "refine with invalid style ignores it" do
+    captured_params = nil
+    mock_response = mock_openai_response("通常のメッセージ")
+
+    mock_client = Object.new
+    mock_client.define_singleton_method(:chat) do |parameters:|
+      captured_params = parameters
+      mock_response
+    end
+
+    OpenAI::Client.stub(:new, mock_client) do
+      AiMessageRefiner.new(@message, style: "invalid_style").refine
+    end
+
+    system_message = captured_params[:messages].find { |m| m[:role] == "system" }
+
+    assert_equal AiMessageRefiner::SYSTEM_PROMPT, system_message[:content]
+  end
+
+  test "refine without style uses base system prompt only" do
+    captured_params = nil
+    mock_response = mock_openai_response("結果")
+
+    mock_client = Object.new
+    mock_client.define_singleton_method(:chat) do |parameters:|
+      captured_params = parameters
+      mock_response
+    end
+
+    OpenAI::Client.stub(:new, mock_client) do
+      AiMessageRefiner.new(@message).refine
+    end
+
+    system_message = captured_params[:messages].find { |m| m[:role] == "system" }
+
+    assert_equal AiMessageRefiner::SYSTEM_PROMPT, system_message[:content]
+  end
 
   private
 
-  def mock_api_response(text)
-    MockResponse.new([MockContent.new(text)])
+  def mock_openai_response(text)
+    {
+      "choices" => [
+        { "message" => { "content" => text } }
+      ]
+    }
   end
 
-  def stub_anthropic_create(response, &)
-    mock_messages_resource = Object.new
-    mock_messages_resource.define_singleton_method(:create) { |**| response }
-
+  def stub_openai_chat(response, &)
     mock_client = Object.new
-    mock_client.define_singleton_method(:messages) { mock_messages_resource }
+    mock_client.define_singleton_method(:chat) { |**| response }
 
-    Anthropic::Client.stub(:new, mock_client, &)
+    OpenAI::Client.stub(:new, mock_client, &)
   end
 end
