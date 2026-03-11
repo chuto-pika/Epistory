@@ -28,7 +28,7 @@ class AiMessageRefiner
   end
 
   def refine
-    client = ::OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
+    client = ::OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY", nil))
     response = client.chat(
       parameters: {
         model: "gpt-4.1-mini",
