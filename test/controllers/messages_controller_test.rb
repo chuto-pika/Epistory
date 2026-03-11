@@ -17,6 +17,23 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show displays image export button" do
+    message = create_message_via_steps
+
+    get message_path(message)
+
+    assert_select "button[data-image-export-target='button']", text: /画像で保存する/
+  end
+
+  test "show contains image export source target" do
+    message = create_message_via_steps
+
+    get message_path(message)
+
+    assert_select "div[data-image-export-target='source']"
+    assert_select "div[data-image-export-target='source'] span", text: "Epistory で作成"
+  end
+
   test "show displays back button to step6" do
     message = create_message_via_steps
 
