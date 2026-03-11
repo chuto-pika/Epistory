@@ -9,7 +9,19 @@ class User < ApplicationRecord
   validates :email, presence: true
 
   def ai_refine_limit_reached?
-    messages.where(ai_refined_at: Time.zone.now.beginning_of_day..).count >= AI_REFINE_DAILY_LIMIT
+    ai_refine_daily_used_today >= AI_REFINE_DAILY_LIMIT
+  end
+
+  def ai_refine_daily_used_today
+    ai_refine_usage_date == Time.zone.today ? ai_refine_daily_used : 0
+  end
+
+  def increment_ai_refine_usage!
+    if ai_refine_usage_date == Time.zone.today
+      update!(ai_refine_daily_used: ai_refine_daily_used + 1)
+    else
+      update!(ai_refine_daily_used: 1, ai_refine_usage_date: Time.zone.today)
+    end
   end
 
   def self.find_or_create_from_auth(auth)
