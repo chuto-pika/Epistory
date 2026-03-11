@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_04_100000) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_11_045211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_04_100000) do
     t.integer "satisfaction_rating"
     t.string "usage_purpose"
     t.jsonb "generated_parts"
+    t.datetime "ai_refined_at"
     t.index ["feeling_id"], name: "index_messages_on_feeling_id"
     t.index ["occasion_id"], name: "index_messages_on_occasion_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
@@ -89,6 +90,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_04_100000) do
     t.string "avatar_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ai_refine_daily_used", default: 0, null: false
+    t.date "ai_refine_usage_date"
     t.index ["email"], name: "index_users_on_email"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end

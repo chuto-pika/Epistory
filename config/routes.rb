@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       patch :regenerate
       patch :regenerate_part
       patch :survey
+      patch :ai_refine
     end
   end
 end
