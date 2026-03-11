@@ -49,19 +49,13 @@ class MessagesController < ApplicationController # rubocop:disable Metrics/Class
     end
   end
 
-  def ai_refine
-    unless logged_in?
-      redirect_to login_path, alert: "AIブラッシュアップにはログインが必要です"
-      return
-    end
+  def ai_refine # rubocop:disable Metrics/AbcSize
+    return redirect_to login_path, alert: "AIブラッシュアップにはログインが必要です" unless logged_in?
+    return redirect_to message_path(@message), alert: ai_refine_limit_message if current_user.ai_refine_limit_reached?
 
-    if current_user.ai_refine_limit_reached?
-      redirect_to message_path(@message), alert: "本日のAIブラッシュアップ回数（#{User::AI_REFINE_DAILY_LIMIT}回）に達しました"
-      return
-    end
-
-    refined_text = AiMessageRefiner.new(@message).refine
+    refined_text = AiMessageRefiner.new(@message, style: params[:style].presence).refine
     @message.update!(edited_content: refined_text, ai_refined_at: Time.current)
+    current_user.increment_ai_refine_usage!
     redirect_to message_path(@message), notice: "AIでメッセージをブラッシュアップしました"
   rescue AiMessageRefiner::RefinementError
     redirect_to message_path(@message), alert: "AI添削に失敗しました。しばらく経ってから再度お試しください"
@@ -129,5 +123,9 @@ class MessagesController < ApplicationController # rubocop:disable Metrics/Class
       edited_content: nil
     )
     updated_parts
+  end
+
+  def ai_refine_limit_message
+    "本日のAIブラッシュアップ回数（#{User::AI_REFINE_DAILY_LIMIT}回）に達しました"
   end
 end
