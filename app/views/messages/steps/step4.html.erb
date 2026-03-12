@@ -4,14 +4,14 @@
       <textarea name="episode" rows="6"
                 data-char-counter-target="input"
                 data-action="input->char-counter#update"
-                class="w-full p-4 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
+                class="w-full p-4 rounded-2xl border-2 border-primary/10 bg-card-bg text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
                 placeholder="例：先月、仕事で落ち込んでいた時にそっと話を聞いてくれた"><%= @episode %></textarea>
       <p class="text-right text-sm text-sub-text mt-1" data-char-counter-target="counter">
         <span data-char-counter-target="current">0</span> / <%= Message::EPISODE_MAX_LENGTH %>
       </p>
     </div>
 
-    <div class="p-4 rounded-xl bg-background-dark/50">
+    <div class="p-4 rounded-2xl bg-background-dark/50">
       <p class="text-sm font-bold text-sub-text mb-2">ヒント</p>
       <ul class="text-sm text-sub-text space-y-1">
         <li>- 最近あった出来事や思い出</li>
@@ -21,8 +21,8 @@
     </div>
 
     <div class="flex gap-4 pt-6">
-      <%= link_to "戻る", step3_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
-      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+      <%= link_to "戻る", step3_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-full font-bold text-lg hover:bg-primary-hover hover:shadow-md transition-all">
         次へ進む
       </button>
     </div>

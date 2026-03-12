@@ -8,24 +8,24 @@
             aria: { label: "選択画面に戻る" } do %>
         <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 0,'wght' 350,'GRAD' 0,'opsz' 24">arrow_back</span>
       <% end %>
-      <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2">メッセージが完成しました</h1>
-      <p class="text-sub-text font-light">あなたの気持ちを込めたメッセージです。</p>
+      <h1 class="text-2xl lg:text-3xl font-display font-medium text-main-text mb-2">メッセージが完成しました</h1>
+      <p class="text-sub-text">あなたの気持ちを込めたメッセージです。</p>
     </div>
 
     <%# 手紙風メッセージ表示 %>
     <div class="relative p-8 lg:p-10 rounded-2xl bg-white/80 border border-primary/10 shadow-sm mb-6"
-         style="background-image: repeating-linear-gradient(transparent, transparent 2.2rem, rgba(192,108,94,0.08) 2.2rem, rgba(192,108,94,0.08) calc(2.2rem + 1px)); background-position: 0 1.4rem;">
+         style="background-image: repeating-linear-gradient(transparent, transparent 2.2rem, rgba(176,125,106,0.08) 2.2rem, rgba(176,125,106,0.08) calc(2.2rem + 1px)); background-position: 0 1.4rem;">
       <p data-clipboard-target="source" class="text-main-text whitespace-pre-line leading-[2.2rem]"><%= @message.display_content %></p>
     </div>
 
     <%# アクションボタン %>
     <div class="flex gap-4 mb-4">
-      <%= link_to edit_message_path(@message), class: "flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all" do %>
+      <%= link_to edit_message_path(@message), class: "flex-1 h-14 bg-primary text-white rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary-hover hover:shadow-md transition-all" do %>
         <span class="material-symbols-outlined text-xl">edit</span>
         編集する
       <% end %>
       <button type="button" data-clipboard-target="button" data-action="click->clipboard#copy"
-              class="flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all">
+              class="flex-1 h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all">
         <span class="material-symbols-outlined text-xl">content_copy</span>
         コピーする
       </button>
@@ -36,7 +36,7 @@
         <% limit_reached = logged_in? && current_user.ai_refine_limit_reached? %>
         <button type="button"
                 data-action="click->ai-refine#reveal"
-                class="w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                class="w-full h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 <%= "disabled" if limit_reached %>>
           <span class="material-symbols-outlined text-xl">auto_awesome</span>
           AIでブラッシュアップ
@@ -76,7 +76,7 @@
     <% end %>
 
     <button type="button" data-image-export-target="button" data-action="click->image-export#save"
-            class="w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all mb-4">
+            class="w-full h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/5 transition-all mb-4">
       <span class="material-symbols-outlined text-xl">image</span>
       画像で保存する
     </button>
@@ -106,8 +106,8 @@
     <% end %>
 
     <div class="space-y-3">
-      <%= link_to "新しいメッセージを作る", new_message_path, class: "block w-full h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg text-center leading-[3.5rem] hover:bg-primary/5 transition-all" %>
-      <%= link_to "トップに戻る", root_path, class: "block w-full h-12 text-sub-text rounded-xl font-medium text-center leading-[3rem] hover:text-primary transition-all" %>
+      <%= link_to "新しいメッセージを作る", new_message_path, class: "block w-full h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg text-center leading-[3.5rem] hover:bg-primary/5 transition-all" %>
+      <%= link_to "トップに戻る", root_path, class: "block w-full h-12 text-sub-text rounded-full font-medium text-center leading-[3rem] hover:text-primary transition-all" %>
     </div>
   </div>
 </section>

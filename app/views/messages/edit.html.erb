@@ -1,13 +1,13 @@
 <section class="py-12 px-6">
   <div class="mx-auto max-w-2xl">
     <div class="mb-8">
-      <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2">メッセージを編集</h1>
-      <p class="text-sub-text font-light">自由に書き換えて、あなたらしい言葉にしてください。</p>
+      <h1 class="text-2xl lg:text-3xl font-display font-medium text-main-text mb-2">メッセージを編集</h1>
+      <p class="text-sub-text">自由に書き換えて、あなたらしい言葉にしてください。</p>
     </div>
 
     <% if @message.parts_available? %>
       <%# パート別表示（再生成アイコン付き） %>
-      <div class="p-6 rounded-2xl border-2 border-primary/10 bg-white/80 mb-4 space-y-4 leading-relaxed">
+      <div class="p-6 rounded-2xl border-2 border-primary/10 bg-card-bg mb-4 space-y-4 leading-relaxed">
         <% %w[opening impression episode closing ps].each do |part_name| %>
           <% next unless @message.generated_parts[part_name].present? %>
           <%= render "messages/message_part", part_name: part_name, content: @message.generated_parts[part_name], message: @message %>
@@ -26,14 +26,14 @@
               id: "edit_textarea",
               value: @message.edited_content.presence || @message.generated_content,
               rows: 12,
-              class: "w-full p-6 rounded-2xl border-2 border-primary/10 bg-white/80 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none leading-relaxed" %>
+              class: "w-full p-6 rounded-2xl border-2 border-primary/10 bg-card-bg text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none leading-relaxed" %>
       </div>
 
       <div class="flex gap-4">
-        <%= link_to message_path(@message), class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" do %>
+        <%= link_to message_path(@message), class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" do %>
           戻る
         <% end %>
-        <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+        <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary-hover hover:shadow-md transition-all">
           <span class="material-symbols-outlined text-xl">save</span>
           保存する
         </button>
@@ -41,7 +41,7 @@
     <% end %>
 
     <div class="pt-4">
-      <%= button_to "元のメッセージに戻す", restore_message_path(@message), method: :patch, class: "w-full h-12 text-sub-text rounded-xl font-medium text-center hover:text-primary transition-all", data: { turbo_confirm: "編集内容を破棄して、元のメッセージに戻しますか？" } %>
+      <%= button_to "元のメッセージに戻す", restore_message_path(@message), method: :patch, class: "w-full h-12 text-sub-text rounded-full font-medium text-center hover:text-primary transition-all", data: { turbo_confirm: "編集内容を破棄して、元のメッセージに戻しますか？" } %>
     </div>
   </div>
 </section>

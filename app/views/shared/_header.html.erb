@@ -1,21 +1,18 @@
-<header class="sticky top-0 z-50 w-full border-b border-primary/5 bg-background-light/80 backdrop-blur-md px-6 lg:px-20 py-4">
-  <div class="mx-auto flex max-w-7xl items-center justify-between">
-    <div class="flex items-center gap-3">
+<header class="fixed top-0 left-0 right-0 z-50 w-full border-b border-primary/10 bg-background-light/90 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-2">
       <% if logged_in? %>
-        <button data-action="click->sidebar#toggle" class="p-1.5 rounded-lg hover:bg-primary/5 transition-colors" aria-label="メッセージ履歴">
+        <button data-action="click->sidebar#toggle" class="p-1.5 rounded-lg hover:bg-primary/10 transition-colors" aria-label="メッセージ履歴">
           <span class="material-symbols-outlined text-primary text-2xl">menu</span>
         </button>
-      <% else %>
-        <div class="text-primary">
-          <span class="material-symbols-outlined text-3xl">auto_stories</span>
-        </div>
       <% end %>
-      <%= link_to "Epistory", root_path, class: "text-xl font-bold tracking-tight text-main-text" %>
+      <%= link_to "Epistory", root_path, class: "text-xl font-display font-medium tracking-wide text-main-text" %>
     </div>
-    <nav class="hidden md:flex items-center gap-10">
-      <a href="#how-it-works" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">使い方</a>
-      <a href="#why-epistory" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">Epistoryとは</a>
-      <%= link_to "メッセージを作る", new_message_path, class: "bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-sm" %>
+    <nav class="hidden md:flex items-center gap-3">
+      <% if local_assigns[:show_anchor_nav] %>
+        <a href="#how-it-works" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">使い方</a>
+        <a href="#why-epistory" class="text-sm font-medium text-sub-text hover:text-primary transition-colors">Epistoryとは</a>
+      <% end %>
       <% if logged_in? %>
         <div class="flex items-center gap-3">
           <% if current_user.avatar_url.present? %>
@@ -27,9 +24,15 @@
       <% else %>
         <%= link_to "ログイン", login_path, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
       <% end %>
+      <%= link_to "メッセージを作る", new_message_path, class: "inline-block rounded-full bg-primary px-5 py-2 text-sm font-medium text-white transition hover:bg-primary-hover hover:shadow-md" %>
     </nav>
-    <div class="md:hidden">
-      <span class="material-symbols-outlined text-main-text">menu</span>
+    <div class="md:hidden flex items-center gap-3">
+      <% if logged_in? %>
+        <%= button_to "ログアウト", logout_path, method: :delete, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
+      <% else %>
+        <%= link_to "ログイン", login_path, class: "text-sm font-medium text-sub-text hover:text-primary transition-colors" %>
+      <% end %>
+      <%= link_to "メッセージを作る", new_message_path, class: "inline-block rounded-full bg-primary px-5 py-2 text-sm font-medium text-white transition hover:bg-primary-hover hover:shadow-md" %>
     </div>
   </div>
 </header>

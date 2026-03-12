@@ -1,13 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #c06c5e;
-  --color-main-text: #4a3728;
-  --color-sub-text: #6b5a4d;
-  --color-background-light: #fdfaf1;
-  --color-background-dark: #f5f0e1;
-  --font-body: "Inter", "Noto Sans JP", sans-serif;
-  --font-display: "Inter", "Noto Sans JP", sans-serif;
+  --color-primary: #b07d6a;
+  --color-primary-hover: #966552;
+  --color-primary-gold: #c9a96e;
+  --color-primary-green: #7d9a85;
+  --color-main-text: #3d3229;
+  --color-sub-text: #6b5e52;
+  --color-background-light: #faf6f0;
+  --color-background-dark: #f0ebe2;
+  --color-card-bg: #fffdf8;
+  --font-body: "Zen Maru Gothic", sans-serif;
+  --font-display: "Klee One", cursive;
+  --font-decorative: "Yomogi", cursive;
 }
 
 @layer base {
@@ -27,11 +32,11 @@
   .glass-panel {
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(192, 108, 94, 0.1);
+    border: 1px solid rgba(176, 125, 106, 0.1);
   }
 
   .hero-gradient {
-    background: radial-gradient(circle at center, rgba(192, 108, 94, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(176, 125, 106, 0.05) 0%, transparent 70%);
   }
 
   /* LP: スクロールリビール */
@@ -86,4 +91,21 @@
 @keyframes lp-pulse {
   0%, 100% { box-shadow: 0 4px 14px rgba(176, 125, 106, 0.3); }
   50% { box-shadow: 0 4px 24px rgba(176, 125, 106, 0.5); }
+}
+
+/* View Transitions API */
+@supports (view-transition-name: root) {
+  ::view-transition-old(root) {
+    animation: vt-fade-slide-out 0.3s ease-out both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-fade-slide-in 0.3s ease-out both;
+  }
+}
+
+@keyframes vt-fade-slide-out {
+  to { transform: translateX(-20px); opacity: 0; }
+}
+@keyframes vt-fade-slide-in {
+  from { transform: translateX(20px); opacity: 0; }
 }

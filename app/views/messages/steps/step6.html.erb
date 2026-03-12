@@ -4,7 +4,7 @@
       <textarea name="additional_message" rows="4"
                 data-char-counter-target="input"
                 data-action="input->char-counter#update"
-                class="w-full p-4 rounded-xl border-2 border-primary/10 bg-white/50 text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
+                class="w-full p-4 rounded-2xl border-2 border-primary/10 bg-card-bg text-main-text placeholder-sub-text/50 focus:border-primary focus:ring-0 focus:outline-none transition-all resize-none"
                 placeholder="例：今度一緒にごはん行こうね"><%= @additional_message %></textarea>
       <p class="text-right text-sm text-sub-text mt-1" data-char-counter-target="counter">
         <span data-char-counter-target="current">0</span> / <%= Message::ADDITIONAL_MESSAGE_MAX_LENGTH %>
@@ -12,8 +12,8 @@
     </div>
 
     <div class="flex gap-4 pt-6">
-      <%= link_to "戻る", step5_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-xl font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
-      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-[0_4px_20px_rgba(192,108,94,0.3)] transition-all">
+      <%= link_to "戻る", step5_message_path, class: "flex-1 h-14 border-2 border-primary/20 text-primary rounded-full font-bold text-lg flex items-center justify-center hover:bg-primary/5 transition-all" %>
+      <button type="submit" class="flex-1 h-14 bg-primary text-white rounded-full font-bold text-lg hover:bg-primary-hover hover:shadow-md transition-all">
         メッセージを作成する
       </button>
     </div>

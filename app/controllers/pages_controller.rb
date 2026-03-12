@@ -4,6 +4,6 @@ class PagesController < ApplicationController
   def privacy; end
 
   def landing
-    render layout: "landing"
+    redirect_to root_path, status: :moved_permanently
   end
 end
