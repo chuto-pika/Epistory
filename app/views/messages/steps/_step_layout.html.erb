@@ -1,13 +1,15 @@
 <%# locals: (current_step:, title:, subtitle:) %>
 <section class="py-12 px-6">
   <div class="mx-auto max-w-2xl">
-    <%= render "messages/steps/progress_bar", current_step: current_step %>
-    <div class="mb-8">
-      <h1 class="text-2xl lg:text-3xl font-bold text-main-text mb-2"><%= title %></h1>
-      <p class="text-sub-text font-light"><%= subtitle %></p>
+    <div class="bg-card-bg rounded-2xl shadow-sm p-8 lg:p-10">
+      <%= render "messages/steps/progress_bar", current_step: current_step %>
+      <div class="mb-8">
+        <h1 class="text-2xl lg:text-3xl font-display font-medium text-main-text mb-2"><%= title %></h1>
+        <p class="text-sub-text font-light"><%= subtitle %></p>
+      </div>
+      <%= render "messages/error_message", message: flash[:alert] if flash[:alert] %>
+      <%= render "messages/error_message", message: @error_message if @error_message %>
+      <%= yield %>
     </div>
-    <%= render "messages/error_message", message: flash[:alert] if flash[:alert] %>
-    <%= render "messages/error_message", message: @error_message if @error_message %>
-    <%= yield %>
   </div>
 </section>
