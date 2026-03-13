@@ -369,5 +369,93 @@ https://www.figma.com/design/9QruxKoB77hXPXCXQ9I2O0/KIMOTI-LETTER?node-id=38-177
 
 ## ER図
 
-<!-- TODO: Issue #105 で Mermaid 記法に差し替え予定 -->
-[![Image from Gyazo](https://i.gyazo.com/fe5a627d11c94bd497c5a8bb39ac0611.png)](https://gyazo.com/fe5a627d11c94bd497c5a8bb39ac0611)
+```mermaid
+erDiagram
+    users {
+        bigint id PK
+        string provider "NOT NULL"
+        string uid "NOT NULL"
+        string name "NOT NULL"
+        string email "NOT NULL"
+        string avatar_url
+        integer ai_refine_daily_used "NOT NULL, default: 0"
+        date ai_refine_usage_date
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    messages {
+        bigint id PK
+        bigint user_id FK
+        bigint recipient_id FK "NOT NULL"
+        bigint occasion_id FK "NOT NULL"
+        bigint feeling_id FK "NOT NULL"
+        text episode
+        text additional_message
+        text generated_content
+        text edited_content
+        string recipient_name
+        integer satisfaction_rating
+        string usage_purpose
+        jsonb generated_parts
+        datetime ai_refined_at
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    message_impressions {
+        bigint id PK
+        bigint message_id FK "NOT NULL"
+        bigint impression_id FK "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    recipients {
+        bigint id PK
+        string name "NOT NULL"
+        integer position "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    occasions {
+        bigint id PK
+        string name "NOT NULL"
+        integer position "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    impressions {
+        bigint id PK
+        string name "NOT NULL"
+        integer position "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    feelings {
+        bigint id PK
+        string name "NOT NULL"
+        integer position "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    contacts {
+        bigint id PK
+        string name "NOT NULL"
+        string email "NOT NULL"
+        text message "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+
+    users ||--o{ messages : "has many"
+    messages }o--|| recipients : "belongs to"
+    messages }o--|| occasions : "belongs to"
+    messages }o--|| feelings : "belongs to"
+    messages ||--o{ message_impressions : "has many"
+    impressions ||--o{ message_impressions : "has many"
+```
